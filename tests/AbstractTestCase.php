@@ -9,6 +9,7 @@ use Brick\Math\BigInteger;
 use Brick\Math\BigRational;
 
 use PHPUnit\Framework\TestCase;
+use Throwable;
 
 /**
  * Base class for math tests.
@@ -78,9 +79,11 @@ abstract class AbstractTestCase extends TestCase
      * @param string $name
      *
      * @return bool
+     *
+     * @psalm-assert-if-true class-string<Throwable> $name
      */
     final protected function isException(string $name) : bool
     {
-        return \substr($name, -9) === 'Exception';
+        return is_a($name, Throwable::class, true);
     }
 }

@@ -31,15 +31,13 @@ final class BigRational extends BigNumber
     private $denominator;
 
     /**
-     * Protected constructor. Use a factory method to obtain an instance.
-     *
      * @param BigInteger $numerator        The numerator.
      * @param BigInteger $denominator      The denominator.
      * @param bool       $checkDenominator Whether to check the denominator for negative and zero.
      *
      * @throws DivisionByZeroException If the denominator is zero.
      */
-    protected function __construct(BigInteger $numerator, BigInteger $denominator, bool $checkDenominator)
+    public function __construct(BigInteger $numerator, BigInteger $denominator, bool $checkDenominator)
     {
         if ($checkDenominator) {
             if ($denominator->isZero()) {
@@ -59,7 +57,7 @@ final class BigRational extends BigNumber
     /**
      * Creates a BigRational of the given value.
      *
-     * @param BigNumber|number|string $value
+     * @param BigNumber|int|float|string $value
      *
      * @return BigRational
      *
@@ -76,8 +74,8 @@ final class BigRational extends BigNumber
      * If the denominator is negative, the signs of both the numerator and the denominator
      * will be inverted to ensure that the denominator is always positive.
      *
-     * @param BigNumber|number|string $numerator   The numerator. Must be convertible to a BigInteger.
-     * @param BigNumber|number|string $denominator The denominator. Must be convertible to a BigInteger.
+     * @param BigNumber|int|float|string $numerator   The numerator. Must be convertible to a BigInteger.
+     * @param BigNumber|int|float|string $denominator The denominator. Must be convertible to a BigInteger.
      *
      * @return BigRational
      *
@@ -106,6 +104,9 @@ final class BigRational extends BigNumber
             $zero = new BigRational(BigInteger::zero(), BigInteger::one(), false);
         }
 
+        /**
+        * @var BigRational
+        */
         return $zero;
     }
 
@@ -122,6 +123,9 @@ final class BigRational extends BigNumber
             $one = new BigRational(BigInteger::one(), BigInteger::one(), false);
         }
 
+        /**
+        * @var BigRational
+        */
         return $one;
     }
 
@@ -138,6 +142,9 @@ final class BigRational extends BigNumber
             $ten = new BigRational(BigInteger::ten(), BigInteger::one(), false);
         }
 
+        /**
+        * @var BigRational
+        */
         return $ten;
     }
 
@@ -190,7 +197,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the sum of this number and the given one.
      *
-     * @param BigNumber|number|string $that The number to add.
+     * @param BigNumber|int|float|string $that The number to add.
      *
      * @return BigRational The result.
      *
@@ -210,7 +217,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the difference of this number and the given one.
      *
-     * @param BigNumber|number|string $that The number to subtract.
+     * @param BigNumber|int|float|string $that The number to subtract.
      *
      * @return BigRational The result.
      *
@@ -230,7 +237,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the product of this number and the given one.
      *
-     * @param BigNumber|number|string $that The multiplier.
+     * @param BigNumber|int|float|string $that The multiplier.
      *
      * @return BigRational The result.
      *
@@ -249,7 +256,7 @@ final class BigRational extends BigNumber
     /**
      * Returns the result of the division of this number by the given one.
      *
-     * @param BigNumber|number|string $that The divisor.
+     * @param BigNumber|int|float|string $that The divisor.
      *
      * @return BigRational The result.
      *

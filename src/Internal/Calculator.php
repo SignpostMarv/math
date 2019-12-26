@@ -32,10 +32,8 @@ abstract class Calculator
 
     /**
      * The Calculator instance in use.
-     *
-     * @var Calculator|null
      */
-    private static $instance;
+    private static ? Calculator $instance = null;
 
     /**
      * Sets the Calculator instance to use.
@@ -92,20 +90,23 @@ abstract class Calculator
      *
      * @param string $a    The first operand.
      * @param string $b    The second operand.
-     * @param string $aDig A variable to store the digits of the first operand.
-     * @param string $bDig A variable to store the digits of the second operand.
-     * @param bool   $aNeg A variable to store whether the first operand is negative.
-     * @param bool   $bNeg A variable to store whether the second operand is negative.
      *
-     * @return void
+     * @return array{0:string, 1:string, 2:bool, 3:bool} the digits of the first operand, the digits of the second operand, whether the first operand is negative, whether the second operand is negative.
      */
-    final protected function init(string $a, string $b, & $aDig, & $bDig, & $aNeg, & $bNeg) : void
+    final protected function init(string $a, string $b) : array
     {
         $aNeg = ($a[0] === '-');
         $bNeg = ($b[0] === '-');
 
         $aDig = $aNeg ? \substr($a, 1) : $a;
         $bDig = $bNeg ? \substr($b, 1) : $b;
+
+        return [
+            $aDig,
+            $bDig,
+            $aNeg,
+            $bNeg,
+        ];
     }
 
     /**
@@ -150,7 +151,7 @@ abstract class Calculator
      */
     final public function cmp(string $a, string $b) : int
     {
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
         if ($aNeg && ! $bNeg) {
             return -1;
@@ -230,7 +231,7 @@ abstract class Calculator
      * @param string $a The dividend.
      * @param string $b The divisor, must not be zero.
      *
-     * @return string[] An array containing the quotient and remainder.
+     * @return array{0:string, 1:string} An array containing the quotient and remainder.
      */
     abstract public function divQR(string $a, string $b) : array;
 
@@ -535,7 +536,7 @@ abstract class Calculator
     /**
      * Performs a bitwise operation on a decimal number.
      *
-     * @param string $operator The operator to use, must be "and", "or" or "xor".
+     * @param 'and'|'or'|'xor' $operator The operator to use, must be "and", "or" or "xor".
      * @param string $a        The left operand.
      * @param string $b        The right operand.
      *
@@ -543,7 +544,7 @@ abstract class Calculator
      */
     private function bitwise(string $operator, string $a, string $b) : string
     {
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
         $aBin = $this->toBinary($aDig);
         $bBin = $this->toBinary($bDig);
@@ -643,8 +644,6 @@ abstract class Calculator
      * Returns the positive decimal representation of a binary number.
      *
      * @param string $bytes The bytes representing the number.
-     *
-     * @return string
      */
     private function toDecimal(string $bytes) : string
     {

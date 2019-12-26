@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Brick\Math\Tests;
 
 use Brick\Math\BigDecimal;
+use Brick\Math\BigNumber;
 use Brick\Math\Exception\DivisionByZeroException;
 use Brick\Math\Exception\NegativeNumberException;
 use Brick\Math\Exception\RoundingNecessaryException;
@@ -18,19 +19,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerOf
      *
-     * @param string|number $value         The value to convert to a BigDecimal.
+     * @param BigNumber|int|float|string $value         The value to convert to a BigDecimal.
      * @param string        $unscaledValue The expected unscaled value.
      * @param int           $scale         The expected scale.
      */
-    public function testOf($value, $unscaledValue, $scale)
+    public function testOf($value, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($value));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string, 2:int}>
      */
-    public function providerOf()
+    public function providerOf() : array
     {
         return [
             [0, '0', 0],
@@ -190,7 +191,7 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:string}>
      */
     public function providerOfFloatInDifferentLocales() : array
     {
@@ -212,17 +213,17 @@ class BigDecimalTest extends AbstractTestCase
      * @dataProvider providerOfInvalidValueThrowsException
      * @expectedException \Brick\Math\Exception\NumberFormatException
      *
-     * @param string $value
+     * @param BigNumber|int|float|string $value
      */
-    public function testOfInvalidValueThrowsException($value)
+    public function testOfInvalidValueThrowsException($value) : void
     {
         BigDecimal::of($value);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string}>
      */
-    public function providerOfInvalidValueThrowsException()
+    public function providerOfInvalidValueThrowsException() : array
     {
         return [
             [''],
@@ -241,7 +242,7 @@ class BigDecimalTest extends AbstractTestCase
         ];
     }
 
-    public function testOfBigDecimalReturnsThis()
+    public function testOfBigDecimalReturnsThis() : void
     {
         $decimal = BigDecimal::of(123);
 
@@ -251,20 +252,20 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerOfUnscaledValue
      *
-     * @param string|int $unscaledValue         The unscaled value of the BigDecimal to create.
+     * @param BigNumber|int|float|string $unscaledValue         The unscaled value of the BigDecimal to create.
      * @param int        $scale                 The scale of the BigDecimal to create.
      * @param string     $expectedUnscaledValue The expected result unscaled value.
      */
-    public function testOfUnscaledValue($unscaledValue, $scale, $expectedUnscaledValue)
+    public function testOfUnscaledValue($unscaledValue, int $scale, string $expectedUnscaledValue) : void
     {
         $number = BigDecimal::ofUnscaledValue($unscaledValue, $scale);
         $this->assertBigDecimalInternalValues($expectedUnscaledValue, $scale, $number);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string}>
      */
-    public function providerOfUnscaledValue()
+    public function providerOfUnscaledValue() : array
     {
         return [
             [123456789, 0, '123456789'],
@@ -297,24 +298,24 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testOfUnscaledValueWithNegativeScaleThrowsException()
+    public function testOfUnscaledValueWithNegativeScaleThrowsException() : void
     {
         BigDecimal::ofUnscaledValue('0', -1);
     }
 
-    public function testZero()
+    public function testZero() : void
     {
         $this->assertBigDecimalInternalValues('0', 0, BigDecimal::zero());
         $this->assertSame(BigDecimal::zero(), BigDecimal::zero());
     }
 
-    public function testOne()
+    public function testOne() : void
     {
         $this->assertBigDecimalInternalValues('1', 0, BigDecimal::one());
         $this->assertSame(BigDecimal::one(), BigDecimal::one());
     }
 
-    public function testTen()
+    public function testTen() : void
     {
         $this->assertBigDecimalInternalValues('10', 0, BigDecimal::ten());
         $this->assertSame(BigDecimal::ten(), BigDecimal::ten());
@@ -323,18 +324,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerMin
      *
-     * @param array  $values The values to compare.
+     * @param list<BigNumber|int|float|string> $values The values to compare.
      * @param string $min    The expected minimum value.
      */
-    public function testMin(array $values, $min)
+    public function testMin(array $values, string $min) : void
     {
         $this->assertBigDecimalEquals($min, BigDecimal::min(... $values));
     }
 
     /**
-     * @return array
+     * @return list<array{0:list<BigNumber|int|float|string>, 1:string}>
      */
-    public function providerMin()
+    public function providerMin() : array
     {
         return [
             [[0, 1, -1], '-1'],
@@ -355,7 +356,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testMinOfZeroValuesThrowsException()
+    public function testMinOfZeroValuesThrowsException() : void
     {
         BigDecimal::min();
     }
@@ -363,7 +364,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\RoundingNecessaryException
      */
-    public function testMinOfNonDecimalValuesThrowsException()
+    public function testMinOfNonDecimalValuesThrowsException() : void
     {
         BigDecimal::min(1, '1/3');
     }
@@ -371,18 +372,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerMax
      *
-     * @param array  $values The values to compare.
+     * @param list<BigNumber|int|float|string> $values The values to compare.
      * @param string $max    The expected maximum value.
      */
-    public function testMax(array $values, $max)
+    public function testMax(array $values, string $max) : void
     {
         $this->assertBigDecimalEquals($max, BigDecimal::max(... $values));
     }
 
     /**
-     * @return array
+     * @return list<array{0:list<BigNumber|int|float|string>, 1:string}>
      */
-    public function providerMax()
+    public function providerMax() : array
     {
         return [
             [[0, 0.9, -1.00], '0.9'],
@@ -407,7 +408,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testMaxOfZeroValuesThrowsException()
+    public function testMaxOfZeroValuesThrowsException() : void
     {
         BigDecimal::max();
     }
@@ -415,7 +416,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\RoundingNecessaryException
      */
-    public function testMaxOfNonDecimalValuesThrowsException()
+    public function testMaxOfNonDecimalValuesThrowsException() : void
     {
         BigDecimal::min(1, '3/7');
     }
@@ -423,18 +424,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSum
      *
-     * @param array  $values The values to add.
+     * @param list<BigNumber|int|float|string> $values The values to add.
      * @param string $sum    The expected sum.
      */
-    public function testSum(array $values, $sum)
+    public function testSum(array $values, string $sum) : void
     {
         $this->assertBigDecimalEquals($sum, BigDecimal::sum(... $values));
     }
 
     /**
-     * @return array
+     * @return list<array{0:list<BigNumber|int|float|string>, 1:string}>
      */
-    public function providerSum()
+    public function providerSum() : array
     {
         return [
             [[0, 0.9, -1.00], '-0.1'],
@@ -459,7 +460,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testSumOfZeroValuesThrowsException()
+    public function testSumOfZeroValuesThrowsException() : void
     {
         BigDecimal::sum();
     }
@@ -467,7 +468,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\RoundingNecessaryException
      */
-    public function testSumOfNonDecimalValuesThrowsException()
+    public function testSumOfNonDecimalValuesThrowsException() : void
     {
         BigDecimal::min(1, '3/7');
     }
@@ -475,20 +476,20 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerPlus
      *
-     * @param string $a             The base number.
-     * @param string $b             The number to add.
+     * @param BigNumber|int|float|string $a             The base number.
+     * @param BigNumber|int|float|string $b             The number to add.
      * @param string $unscaledValue The expected unscaled value.
      * @param int    $scale         The expected scale.
      */
-    public function testPlus($a, $b, $unscaledValue, $scale)
+    public function testPlus($a, $b, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($a)->plus($b));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:string, 3:int}>
      */
-    public function providerPlus()
+    public function providerPlus() : array
     {
         return [
             ['123',    '999',    '1122',   0],
@@ -544,20 +545,20 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerMinus
      *
-     * @param string $a             The base number.
-     * @param string $b             The number to subtract.
+     * @param BigNumber|int|float|string $a             The base number.
+     * @param BigNumber|int|float|string $b             The number to subtract.
      * @param string $unscaledValue The expected unscaled value.
      * @param int    $scale         The expected scale.
      */
-    public function testMinus($a, $b, $unscaledValue, $scale)
+    public function testMinus($a, $b, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($a)->minus($b));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:string, 3:int}>
      */
-    public function providerMinus()
+    public function providerMinus() : array
     {
         return [
             ['123',    '999',    '-876',   0],
@@ -613,20 +614,20 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerMultipliedBy
      *
-     * @param string $a             The base number.
-     * @param string $b             The number to multiply.
+     * @param BigNumber|int|float|string $a             The base number.
+     * @param BigNumber|int|float|string $b             The number to multiply.
      * @param string $unscaledValue The expected unscaled value.
      * @param int    $scale         The expected scale.
      */
-    public function testMultipliedBy($a, $b, $unscaledValue, $scale)
+    public function testMultipliedBy($a, $b, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($a)->multipliedBy($b));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:string, 3:int}>
      */
-    public function providerMultipliedBy()
+    public function providerMultipliedBy() : array
     {
         return [
             ['123',    '999',    '122877',     0],
@@ -687,23 +688,23 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerDividedBy
      *
-     * @param string   $a             The base number.
-     * @param string   $b             The number to divide.
+     * @param BigNumber|int|float|string   $a             The base number.
+     * @param BigNumber|int|float|string   $b             The number to divide.
      * @param int|null $scale         The desired scale of the result.
      * @param int      $roundingMode  The rounding mode.
      * @param string   $unscaledValue The expected unscaled value of the result.
      * @param int      $expectedScale The expected scale of the result.
      */
-    public function testDividedBy($a, $b, $scale, $roundingMode, $unscaledValue, $expectedScale)
+    public function testDividedBy($a, $b, ? int $scale, int $roundingMode, string $unscaledValue, int $expectedScale) : void
     {
         $decimal = BigDecimal::of($a)->dividedBy($b, $scale, $roundingMode);
         $this->assertBigDecimalInternalValues($unscaledValue, $expectedScale, $decimal);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:int|null, 3:int, 4:string, 5:int}>
      */
-    public function providerDividedBy()
+    public function providerDividedBy() : array
     {
         return [
             [ '7',  '0.2', 0, RoundingMode::UNNECESSARY,  '35', 0],
@@ -731,17 +732,17 @@ class BigDecimalTest extends AbstractTestCase
      * @dataProvider providerDividedByByZeroThrowsException
      * @expectedException \Brick\Math\Exception\DivisionByZeroException
      *
-     * @param string|number $zero
+     * @param BigNumber|int|float|string $zero
      */
-    public function testDividedByByZeroThrowsException($zero)
+    public function testDividedByByZeroThrowsException($zero) : void
     {
         BigDecimal::of(1)->dividedBy($zero, 0);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string}>
      */
-    public function providerDividedByByZeroThrowsException()
+    public function providerDividedByByZeroThrowsException() : array
     {
         return [
             [0],
@@ -755,11 +756,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerExactlyDividedBy
      *
-     * @param string|number $number   The number to divide.
-     * @param string|number $divisor  The divisor.
+     * @param BigNumber|int|float|string $number   The number to divide.
+     * @param BigNumber|int|float|string $divisor  The divisor.
      * @param string        $expected The expected result, or a class name if an exception is expected.
      */
-    public function testExactlyDividedBy($number, $divisor, $expected)
+    public function testExactlyDividedBy($number, $divisor, string $expected) : void
     {
         $number = BigDecimal::of($number);
 
@@ -775,9 +776,9 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:string}>
      */
-    public function providerExactlyDividedBy()
+    public function providerExactlyDividedBy() : array
     {
         return [
             [1, 1, '1'],
@@ -814,7 +815,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\DivisionByZeroException
      */
-    public function testExactlyDividedByZero()
+    public function testExactlyDividedByZero() : void
     {
         BigDecimal::of(1)->exactlyDividedBy(0);
     }
@@ -823,19 +824,19 @@ class BigDecimalTest extends AbstractTestCase
      * @dataProvider providerDividedByWithRoundingNecessaryThrowsException
      * @expectedException \Brick\Math\Exception\RoundingNecessaryException
      *
-     * @param string $a     The base number.
-     * @param string $b     The number to divide by.
+     * @param BigNumber|int|float|string $a     The base number.
+     * @param BigNumber|int|float|string $b     The number to divide by.
      * @param int    $scale The desired scale,.
      */
-    public function testDividedByWithRoundingNecessaryThrowsException($a, $b, $scale)
+    public function testDividedByWithRoundingNecessaryThrowsException($a, $b, int $scale) : void
     {
         BigDecimal::of($a)->dividedBy($b, $scale);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:int}>
      */
-    public function providerDividedByWithRoundingNecessaryThrowsException()
+    public function providerDividedByWithRoundingNecessaryThrowsException() : array
     {
         return [
             ['1.234', '123.456', 3],
@@ -847,7 +848,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testDividedByWithNegativeScaleThrowsException()
+    public function testDividedByWithNegativeScaleThrowsException() : void
     {
         BigDecimal::of(1)->dividedBy(2, -1);
     }
@@ -855,7 +856,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testDividedByWithInvalidRoundingModeThrowsException()
+    public function testDividedByWithInvalidRoundingModeThrowsException() : void
     {
         BigDecimal::of(1)->dividedBy(2, 0, -1);
     }
@@ -863,13 +864,13 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerRoundingMode
      *
-     * @param int         $roundingMode The rounding mode.
-     * @param string      $number       The number to round.
+     * @param 0|1|2|3|4|5|6|7|8|9 $roundingMode The rounding mode.
+     * @param BigNumber|int|float|string      $number       The number to round.
      * @param string|null $two          The expected rounding to a scale of two, or null if an exception is expected.
      * @param string|null $one          The expected rounding to a scale of one, or null if an exception is expected.
      * @param string|null $zero         The expected rounding to a scale of zero, or null if an exception is expected.
      */
-    public function testRoundingMode($roundingMode, $number, $two, $one, $zero)
+    public function testRoundingMode(int $roundingMode, $number, ? string $two, ? string $one, ? string $zero) : void
     {
         $number = BigDecimal::of($number);
 
@@ -878,14 +879,14 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @param int         $roundingMode The rounding mode.
+     * @param 0|1|2|3|4|5|6|7|8|9         $roundingMode The rounding mode.
      * @param BigDecimal  $number       The number to round.
-     * @param string      $divisor      The divisor.
+     * @param BigNumber|int|float|string      $divisor      The divisor.
      * @param string|null $two          The expected rounding to a scale of two, or null if an exception is expected.
      * @param string|null $one          The expected rounding to a scale of one, or null if an exception is expected.
      * @param string|null $zero         The expected rounding to a scale of zero, or null if an exception is expected.
      */
-    private function doTestRoundingMode($roundingMode, BigDecimal $number, $divisor, $two, $one, $zero)
+    private function doTestRoundingMode(int $roundingMode, BigDecimal $number, $divisor, ? string $two, ? string $one, ? string $zero) : void
     {
         foreach ([$zero, $one, $two] as $scale => $expected) {
             if ($expected === null) {
@@ -901,9 +902,9 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:0|1|2|3|4|5|6|7|8|9, 1:BigNumber|int|float|string, 2:string|null, 3:string|null, 4:string|null}>
      */
-    public function providerRoundingMode()
+    public function providerRoundingMode() : array
     {
         return [
             [RoundingMode::UP,  '3.501',  '351',  '36',  '4'],
@@ -1371,12 +1372,12 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerQuotientAndRemainder
      *
-     * @param string $dividend  The dividend.
-     * @param string $divisor   The divisor.
+     * @param BigNumber|int|float|string $dividend  The dividend.
+     * @param BigNumber|int|float|string $divisor   The divisor.
      * @param string $quotient  The expected quotient.
      * @param string $remainder The expected remainder.
      */
-    public function testQuotientAndRemainder($dividend, $divisor, $quotient, $remainder)
+    public function testQuotientAndRemainder($dividend, $divisor, string $quotient, string $remainder) : void
     {
         $dividend = BigDecimal::of($dividend);
 
@@ -1390,9 +1391,9 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:string, 3:string}>
      */
-    public function providerQuotientAndRemainder()
+    public function providerQuotientAndRemainder() : array
     {
         return [
             ['1', '123', '0', '1'],
@@ -1464,7 +1465,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\DivisionByZeroException
      */
-    public function testQuotientOfZeroThrowsException()
+    public function testQuotientOfZeroThrowsException() : void
     {
         BigDecimal::of(1.2)->quotient(0);
     }
@@ -1472,7 +1473,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\DivisionByZeroException
      */
-    public function testRemainderOfZeroThrowsException()
+    public function testRemainderOfZeroThrowsException() : void
     {
         BigDecimal::of(1.2)->remainder(0);
     }
@@ -1480,7 +1481,7 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @expectedException \Brick\Math\Exception\DivisionByZeroException
      */
-    public function testQuotientAndRemainderOfZeroThrowsException()
+    public function testQuotientAndRemainderOfZeroThrowsException() : void
     {
         BigDecimal::of(1.2)->quotientAndRemainder(0);
     }
@@ -1488,11 +1489,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSqrt
      *
-     * @param string $number
+     * @param BigNumber|int|float|string $number
      * @param int    $scale
      * @param string $sqrt
      */
-    public function testSqrt(string $number, int $scale, string $sqrt)
+    public function testSqrt($number, int $scale, string $sqrt) : void
     {
         $number = BigDecimal::of($number);
 
@@ -1500,9 +1501,9 @@ class BigDecimalTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string}>
      */
-    public function providerSqrt()
+    public function providerSqrt() : array
     {
         return [
             ['0', 0, '0'],
@@ -1699,14 +1700,14 @@ class BigDecimalTest extends AbstractTestCase
         ];
     }
 
-    public function testSqrtOfNegativeNumber()
+    public function testSqrtOfNegativeNumber() : void
     {
         $number = BigDecimal::of(-1);
         $this->expectException(NegativeNumberException::class);
         $number->sqrt(0);
     }
 
-    public function testSqrtWithNegativeScale()
+    public function testSqrtWithNegativeScale() : void
     {
         $number = BigDecimal::of(1);
         $this->expectException(\InvalidArgumentException::class);
@@ -1716,20 +1717,20 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerPower
      *
-     * @param string  $number        The base number.
+     * @param BigNumber|int|float|string  $number        The base number.
      * @param int     $exponent      The exponent to apply.
      * @param string  $unscaledValue The expected unscaled value of the result.
      * @param int     $scale         The expected scale of the result.
      */
-    public function testPower($number, $exponent, $unscaledValue, $scale)
+    public function testPower($number, int $exponent, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($number)->power($exponent));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string, 3:int}>
      */
-    public function providerPower()
+    public function providerPower() : array
     {
         return [
             ['-3', 0, '1', 0],
@@ -1783,18 +1784,16 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerPowerWithInvalidExponentThrowsException
      * @expectedException \InvalidArgumentException
-     *
-     * @param int $power
      */
-    public function testPowerWithInvalidExponentThrowsException($power)
+    public function testPowerWithInvalidExponentThrowsException(int $power) : void
     {
         BigDecimal::of(1)->power($power);
     }
 
     /**
-     * @return array
+     * @return list<array{0:int}>
      */
-    public function providerPowerWithInvalidExponentThrowsException()
+    public function providerPowerWithInvalidExponentThrowsException() : array
     {
         return [
             [-1],
@@ -1805,22 +1804,22 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider toScaleProvider
      *
-     * @param string $number        The number to scale.
+     * @param BigNumber|int|float|string $number        The number to scale.
      * @param int    $toScale       The scale to apply.
-     * @param int    $roundingMode  The rounding mode to apply.
+     * @param 0|1|2|3|4|5|6|7|8|9    $roundingMode  The rounding mode to apply.
      * @param string $unscaledValue The expected unscaled value of the result.
      * @param int    $scale         The expected scale of the result.
      */
-    public function testToScale($number, $toScale, $roundingMode, $unscaledValue, $scale)
+    public function testToScale($number, $toScale, int $roundingMode, string $unscaledValue, int $scale) : void
     {
         $decimal = BigDecimal::of($number)->toScale($toScale, $roundingMode);
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, $decimal);
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:0|1|2|3|4|5|6|7|8|9, 3:string, 4:int}>
      */
-    public function toScaleProvider()
+    public function toScaleProvider() : array
     {
         return [
             ['123.45', 0, RoundingMode::DOWN, '123', 0],
@@ -1833,19 +1832,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerWithPointMovedLeft
      *
-     * @param string $number   The decimal number as a string.
+     * @param BigNumber|int|float|string $number   The decimal number as a string.
      * @param int    $places   The number of decimal places to move left.
      * @param string $expected The expected result.
      */
-    public function testWithPointMovedLeft($number, $places, $expected)
+    public function testWithPointMovedLeft($number, int $places, string $expected) : void
     {
         $this->assertBigDecimalEquals($expected, BigDecimal::of($number)->withPointMovedLeft($places));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string}>
      */
-    public function providerWithPointMovedLeft()
+    public function providerWithPointMovedLeft() : array
     {
         return [
             ['0', -2, '0'],
@@ -1919,19 +1918,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerWithPointMovedRight
      *
-     * @param string $number   The decimal number as a string.
+     * @param BigNumber|int|float|string $number   The decimal number as a string.
      * @param int    $places   The number of decimal places to move right.
      * @param string $expected The expected result.
      */
-    public function testWithPointMovedRight($number, $places, $expected)
+    public function testWithPointMovedRight($number, int $places, string $expected) : void
     {
         $this->assertBigDecimalEquals($expected, BigDecimal::of($number)->withPointMovedRight($places));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string}>
      */
-    public function providerWithPointMovedRight()
+    public function providerWithPointMovedRight() : array
     {
         return [
             ['0', -2, '0.00'],
@@ -2005,18 +2004,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerStripTrailingZeros
      *
-     * @param string $number   The number to trim.
+     * @param BigNumber|int|float|string $number   The number to trim.
      * @param string $expected The expected result.
      */
-    public function testStripTrailingZeros($number, $expected)
+    public function testStripTrailingZeros($number, string $expected) : void
     {
         $this->assertBigDecimalEquals($expected, BigDecimal::of($number)->stripTrailingZeros());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string}>
      */
-    public function providerStripTrailingZeros()
+    public function providerStripTrailingZeros() : array
     {
         return [
             ['0', '0'],
@@ -2053,19 +2052,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerAbs
      *
-     * @param string $number        The number as a string.
+     * @param BigNumber|int|float|string $number        The number as a string.
      * @param string $unscaledValue The expected unscaled value of the absolute result.
      * @param int    $scale         The expected scale of the absolute result.
      */
-    public function testAbs($number, $unscaledValue, $scale)
+    public function testAbs($number, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($number)->abs());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string, 2:int}>
      */
-    public function providerAbs()
+    public function providerAbs() : array
     {
         return [
             ['123', '123', 0],
@@ -2078,19 +2077,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerNegated
      *
-     * @param string $number        The number to negate as a string.
+     * @param BigNumber|int|float|string $number        The number to negate as a string.
      * @param string $unscaledValue The expected unscaled value of the result.
      * @param int    $scale         The expected scale of the result.
      */
-    public function testNegated($number, $unscaledValue, $scale)
+    public function testNegated($number, string $unscaledValue, int $scale) : void
     {
         $this->assertBigDecimalInternalValues($unscaledValue, $scale, BigDecimal::of($number)->negated());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string, 2:int}>
      */
-    public function providerNegated()
+    public function providerNegated() : array
     {
         return [
             ['123', '-123', 0],
@@ -2103,11 +2102,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The expected comparison result.
      */
-    public function testCompareTo($a, $b, $c)
+    public function testCompareTo($a, $b, int $c) : void
     {
         $this->assertSame($c, BigDecimal::of($a)->compareTo($b));
     }
@@ -2115,11 +2114,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The comparison result.
      */
-    public function testIsEqualTo($a, $b, $c)
+    public function testIsEqualTo($a, $b, int $c) : void
     {
         $this->assertSame($c === 0, BigDecimal::of($a)->isEqualTo($b));
     }
@@ -2127,11 +2126,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The comparison result.
      */
-    public function testIsLessThan($a, $b, $c)
+    public function testIsLessThan($a, $b, int $c) : void
     {
         $this->assertSame($c < 0, BigDecimal::of($a)->isLessThan($b));
     }
@@ -2139,11 +2138,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The comparison result.
      */
-    public function testIsLessThanOrEqualTo($a, $b, $c)
+    public function testIsLessThanOrEqualTo($a, $b, int $c) : void
     {
         $this->assertSame($c <= 0, BigDecimal::of($a)->isLessThanOrEqualTo($b));
     }
@@ -2151,11 +2150,11 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The comparison result.
      */
-    public function testIsGreaterThan($a, $b, $c)
+    public function testIsGreaterThan($a, $b, int $c) : void
     {
         $this->assertSame($c > 0, BigDecimal::of($a)->isGreaterThan($b));
     }
@@ -2163,19 +2162,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerCompareTo
      *
-     * @param string $a The base number as a string.
-     * @param string $b The number to compare to as a string.
+     * @param BigNumber|int|float|string $a The base number as a string.
+     * @param BigNumber|int|float|string $b The number to compare to as a string.
      * @param int    $c The comparison result.
      */
-    public function testIsGreaterThanOrEqualTo($a, $b, $c)
+    public function testIsGreaterThanOrEqualTo($a, $b, int $c) : void
     {
         $this->assertSame($c >= 0, BigDecimal::of($a)->isGreaterThanOrEqualTo($b));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:BigNumber|int|float|string, 2:int}>
      */
-    public function providerCompareTo()
+    public function providerCompareTo() : array
     {
         return [
             ['123', '123',  0],
@@ -2227,10 +2226,10 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testGetSign($number, $sign)
+    public function testGetSign($number, int $sign) : void
     {
         $this->assertSame($sign, BigDecimal::of($number)->getSign());
     }
@@ -2238,10 +2237,10 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testIsZero($number, $sign)
+    public function testIsZero($number, int $sign) : void
     {
         $this->assertSame($sign === 0, BigDecimal::of($number)->isZero());
     }
@@ -2249,10 +2248,10 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testIsNegative($number, $sign)
+    public function testIsNegative($number, int $sign) : void
     {
         $this->assertSame($sign < 0, BigDecimal::of($number)->isNegative());
     }
@@ -2260,10 +2259,10 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testIsNegativeOrZero($number, $sign)
+    public function testIsNegativeOrZero($number, int $sign) : void
     {
         $this->assertSame($sign <= 0, BigDecimal::of($number)->isNegativeOrZero());
     }
@@ -2271,10 +2270,10 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testIsPositive($number, $sign)
+    public function testIsPositive($number, int $sign) : void
     {
         $this->assertSame($sign > 0, BigDecimal::of($number)->isPositive());
     }
@@ -2282,18 +2281,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerSign
      *
-     * @param number|string $number The number to test.
+     * @param BigNumber|int|float|string $number The number to test.
      * @param int           $sign   The sign of the number.
      */
-    public function testIsPositiveOrZero($number, $sign)
+    public function testIsPositiveOrZero($number, int $sign) : void
     {
         $this->assertSame($sign >= 0, BigDecimal::of($number)->isPositiveOrZero());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int}>
      */
-    public function providerSign()
+    public function providerSign() : array
     {
         return [
             [ 0,  0],
@@ -2329,18 +2328,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerGetIntegralPart
      *
-     * @param string $number   The number to test.
+     * @param BigNumber|int|float|string $number   The number to test.
      * @param string $expected The expected integral value.
      */
-    public function testGetIntegralPart($number, $expected)
+    public function testGetIntegralPart($number, string $expected) : void
     {
         $this->assertSame($expected, BigDecimal::of($number)->getIntegralPart());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string}>
      */
-    public function providerGetIntegralPart()
+    public function providerGetIntegralPart() : array
     {
         return [
             ['1.23', '1'],
@@ -2356,18 +2355,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerGetFractionalPart
      *
-     * @param string $number   The number to test.
+     * @param BigNumber|int|float|string $number   The number to test.
      * @param string $expected The expected fractional value.
      */
-    public function testGetFractionalPart($number, $expected)
+    public function testGetFractionalPart($number, string $expected) : void
     {
         $this->assertSame($expected, BigDecimal::of($number)->getFractionalPart());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string}>
      */
-    public function providerGetFractionalPart()
+    public function providerGetFractionalPart() : array
     {
         return [
             ['1.23', '23'],
@@ -2382,18 +2381,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerHasNonZeroFractionalPart
      *
-     * @param string $number                   The number to test.
+     * @param BigNumber|int|float|string $number                   The number to test.
      * @param bool   $hasNonZeroFractionalPart The expected return value.
      */
-    public function testHasNonZeroFractionalPart($number, $hasNonZeroFractionalPart)
+    public function testHasNonZeroFractionalPart($number, bool $hasNonZeroFractionalPart) : void
     {
         $this->assertSame($hasNonZeroFractionalPart, BigDecimal::of($number)->hasNonZeroFractionalPart());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:bool}>
      */
-    public function providerHasNonZeroFractionalPart()
+    public function providerHasNonZeroFractionalPart() : array
     {
         return [
             ['1', false],
@@ -2408,18 +2407,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerToBigInteger
      *
-     * @param string $decimal  The number to convert.=
+     * @param BigNumber|int|float|string $decimal  The number to convert.=
      * @param string $expected The expected value.
      */
-    public function testToBigInteger($decimal, $expected)
+    public function testToBigInteger($decimal, string $expected) : void
     {
         $this->assertBigIntegerEquals($expected, BigDecimal::of($decimal)->toBigInteger());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string}>
      */
-    public function providerToBigInteger()
+    public function providerToBigInteger() : array
     {
         return [
             ['0', '0'],
@@ -2434,17 +2433,17 @@ class BigDecimalTest extends AbstractTestCase
      * @dataProvider providerToBigIntegerThrowsExceptionWhenRoundingNecessary
      * @expectedException \Brick\Math\Exception\RoundingNecessaryException
      *
-     * @param string $decimal A decimal number with a non-zero fractional part.
+     * @param BigNumber|int|float|string $decimal A decimal number with a non-zero fractional part.
      */
-    public function testToBigIntegerThrowsExceptionWhenRoundingNecessary($decimal)
+    public function testToBigIntegerThrowsExceptionWhenRoundingNecessary($decimal) : void
     {
         BigDecimal::of($decimal)->toBigInteger();
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string}>
      */
-    public function providerToBigIntegerThrowsExceptionWhenRoundingNecessary()
+    public function providerToBigIntegerThrowsExceptionWhenRoundingNecessary() : array
     {
         return [
             ['0.1'],
@@ -2462,18 +2461,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerToBigRational
      *
-     * @param string $decimal  The decimal number to test.
+     * @param BigNumber|int|float|string $decimal  The decimal number to test.
      * @param string $rational The expected rational number.
      */
-    public function testToBigRational($decimal, $rational)
+    public function testToBigRational($decimal, string $rational) : void
     {
         $this->assertBigRationalEquals($rational, BigDecimal::of($decimal)->toBigRational());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:string}>
      */
-    public function providerToBigRational()
+    public function providerToBigRational() : array
     {
         return [
             ['0', '0'],
@@ -2511,16 +2510,16 @@ class BigDecimalTest extends AbstractTestCase
      *
      * @param int $number The decimal number to test.
      */
-    public function testToInt($number)
+    public function testToInt(int $number) : void
     {
         $this->assertSame($number, BigDecimal::of($number)->toInt());
         $this->assertSame($number, BigDecimal::of($number . '.0')->toInt());
     }
 
     /**
-     * @return array
+     * @return list<array{0:int}>
      */
-    public function providerToInt()
+    public function providerToInt() : array
     {
         return [
             [PHP_INT_MIN],
@@ -2537,17 +2536,17 @@ class BigDecimalTest extends AbstractTestCase
      * @dataProvider providerToIntThrowsException
      * @expectedException \Brick\Math\Exception\MathException
      *
-     * @param string $number A valid decimal number that cannot safely be converted to a native integer.
+     * @param BigNumber|int|float|string $number A valid decimal number that cannot safely be converted to a native integer.
      */
-    public function testToIntThrowsException($number)
+    public function testToIntThrowsException($number) : void
     {
         BigDecimal::of($number)->toInt();
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string}>
      */
-    public function providerToIntThrowsException()
+    public function providerToIntThrowsException() : array
     {
         return [
             ['-999999999999999999999999999999'],
@@ -2560,18 +2559,18 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerToFloat
      *
-     * @param string $value The big decimal value.
+     * @param BigNumber|int|float|string $value The big decimal value.
      * @param float  $float The expected float value.
      */
-    public function testToFloat($value, $float)
+    public function testToFloat($value, float $float) : void
     {
         $this->assertSame($float, BigDecimal::of($value)->toFloat());
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:float}>
      */
-    public function providerToFloat()
+    public function providerToFloat() : array
     {
         return [
             ['0', 0.0],
@@ -2587,19 +2586,19 @@ class BigDecimalTest extends AbstractTestCase
     /**
      * @dataProvider providerToString
      *
-     * @param string $unscaledValue The unscaled value.
+     * @param BigNumber|int|float|string $unscaledValue The unscaled value.
      * @param int    $scale         The scale.
      * @param string $expected      The expected string representation.
      */
-    public function testToString($unscaledValue, $scale, $expected)
+    public function testToString($unscaledValue, int $scale, string $expected) : void
     {
         $this->assertSame($expected, (string) BigDecimal::ofUnscaledValue($unscaledValue, $scale));
     }
 
     /**
-     * @return array
+     * @return list<array{0:BigNumber|int|float|string, 1:int, 2:string}>
      */
-    public function providerToString()
+    public function providerToString() : array
     {
         return [
             ['0',   0, '0'],
@@ -2638,20 +2637,27 @@ class BigDecimalTest extends AbstractTestCase
         ];
     }
 
-    public function testSerialize()
+    public function testSerialize() : void
     {
         $value = '-1234567890987654321012345678909876543210123456789';
         $scale = 37;
 
         $number = BigDecimal::ofUnscaledValue($value, $scale);
 
-        $this->assertBigDecimalInternalValues($value, $scale, \unserialize(\serialize($number)));
+        /**
+        * @var mixed
+        */
+        $number = \unserialize(\serialize($number));
+
+        static::assertTrue($number instanceof BigDecimal);
+
+        $this->assertBigDecimalInternalValues($value, $scale, $number);
     }
 
     /**
      * @expectedException \LogicException
      */
-    public function testDirectCallToUnserialize()
+    public function testDirectCallToUnserialize() : void
     {
         BigDecimal::zero()->unserialize('123:0');
     }

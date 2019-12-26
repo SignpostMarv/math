@@ -51,11 +51,18 @@ class NativeCalculator extends Calculator
      */
     public function add(string $a, string $b) : string
     {
+        [$a, $b] = static::TypeHintNumeric($a, $b);
+
+        /**
+        * @var int|float
+        */
         $result = $a + $b;
 
         if (is_int($result)) {
             return (string) $result;
         }
+
+        [$a, $b] = static::TypeHintString($a, $b);
 
         if ($a === '0') {
             return $b;
@@ -65,7 +72,7 @@ class NativeCalculator extends Calculator
             return $a;
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
         if ($aNeg === $bNeg) {
             $result = $this->doAdd($aDig, $bDig);
@@ -77,6 +84,9 @@ class NativeCalculator extends Calculator
             $result = $this->neg($result);
         }
 
+        /**
+        * @var string
+        */
         return $result;
     }
 
@@ -93,11 +103,18 @@ class NativeCalculator extends Calculator
      */
     public function mul(string $a, string $b) : string
     {
+        [$a, $b] = static::TypeHintNumeric($a, $b);
+
+        /**
+        * @var int|float
+        */
         $result = $a * $b;
 
         if (is_int($result)) {
             return (string) $result;
         }
+
+        [$a, $b] = static::TypeHintString($a, $b);
 
         if ($a === '0' || $b === '0') {
             return '0';
@@ -119,7 +136,7 @@ class NativeCalculator extends Calculator
             return $this->neg($a);
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
         $result = $this->doMul($aDig, $bDig);
 
@@ -127,6 +144,9 @@ class NativeCalculator extends Calculator
             $result = $this->neg($result);
         }
 
+        /**
+        * @var string
+        */
         return $result;
     }
 
@@ -160,12 +180,20 @@ class NativeCalculator extends Calculator
         }
 
         if ($b === '1') {
+            /**
+            * @var array{0:string, 1:string}
+            */
             return [$a, '0'];
         }
 
         if ($b === '-1') {
+            /**
+            * @var array{0:string, 1:string}
+            */
             return [$this->neg($a), '0'];
         }
+
+        [$a, $b] = static::TypeHintNumeric($a, $b);
 
         $na = $a * 1; // cast to number
 
@@ -187,9 +215,11 @@ class NativeCalculator extends Calculator
             }
         }
 
-        $this->init($a, $b, $aDig, $bDig, $aNeg, $bNeg);
+        [$a, $b] = static::TypeHintString($a, $b);
 
-        [$q, $r] = $this->doDiv($aDig, $bDig);
+        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
+
+        [$q, $r] = static::TypeHintString(...$this->doDiv($aDig, $bDig));
 
         if ($aNeg !== $bNeg) {
             $q = $this->neg($q);
@@ -219,12 +249,15 @@ class NativeCalculator extends Calculator
         $e -= $odd;
 
         $aa = $this->mul($a, $a);
-        $result = $this->pow($aa, $e / 2);
+        $result = $this->pow($aa, (int) ($e / 2));
 
         if ($odd === 1) {
             $result = $this->mul($result, $a);
         }
 
+        /**
+        * @var string
+        */
         return $result;
     }
 
@@ -255,6 +288,9 @@ class NativeCalculator extends Calculator
             $x = $nx;
         }
 
+        /**
+        * @var string
+        */
         return $x;
     }
 
@@ -272,8 +308,9 @@ class NativeCalculator extends Calculator
 
         $carry = 0;
         $result = '';
+        $i = $length - $this->maxDigits;
 
-        for ($i = $length - $this->maxDigits;; $i -= $this->maxDigits) {
+        for (;; $i -= $this->maxDigits) {
             $blockLength = $this->maxDigits;
 
             if ($i < 0) {
@@ -281,7 +318,14 @@ class NativeCalculator extends Calculator
                 $i = 0;
             }
 
+            /**
+            * @var numeric
+            */
             $blockA = \substr($a, $i, $blockLength);
+
+            /**
+            * @var numeric
+            */
             $blockB = \substr($b, $i, $blockLength);
 
             $sum = (string) ($blockA + $blockB + $carry);
@@ -342,8 +386,9 @@ class NativeCalculator extends Calculator
         $result = '';
 
         $complement = 10 ** $this->maxDigits;
+        $i = $length - $this->maxDigits;
 
-        for ($i = $length - $this->maxDigits;; $i -= $this->maxDigits) {
+        for (;; $i -= $this->maxDigits) {
             $blockLength = $this->maxDigits;
 
             if ($i < 0) {
@@ -351,7 +396,14 @@ class NativeCalculator extends Calculator
                 $i = 0;
             }
 
+            /**
+            * @var numeric
+            */
             $blockA = \substr($a, $i, $blockLength);
+
+            /**
+            * @var numeric
+            */
             $blockB = \substr($b, $i, $blockLength);
 
             $sum = $blockA - $blockB - $carry;
@@ -386,6 +438,9 @@ class NativeCalculator extends Calculator
             $result = $this->neg($result);
         }
 
+        /**
+        * @var string
+        */
         return $result;
     }
 
@@ -406,8 +461,9 @@ class NativeCalculator extends Calculator
         $complement = 10 ** $maxDigits;
 
         $result = '0';
+        $i = $x - $maxDigits;
 
-        for ($i = $x - $maxDigits;; $i -= $maxDigits) {
+        for (;; $i -= $maxDigits) {
             $blockALength = $maxDigits;
 
             if ($i < 0) {
@@ -419,8 +475,9 @@ class NativeCalculator extends Calculator
 
             $line = '';
             $carry = 0;
+            $j = $y - $maxDigits;
 
-            for ($j = $y - $maxDigits;; $j -= $maxDigits) {
+            for (;; $j -= $maxDigits) {
                 $blockBLength = $maxDigits;
 
                 if ($j < 0) {
@@ -460,6 +517,9 @@ class NativeCalculator extends Calculator
             }
         }
 
+        /**
+        * @var string
+        */
         return $result;
     }
 
@@ -469,7 +529,7 @@ class NativeCalculator extends Calculator
      * @param string $a The first operand.
      * @param string $b The second operand.
      *
-     * @return string[] The quotient and remainder.
+     * @return array{0:numeric, 1:numeric} The quotient and remainder.
      */
     private function doDiv(string $a, string $b) : array
     {
@@ -489,7 +549,7 @@ class NativeCalculator extends Calculator
         $z = $y; // focus length, always $y or $y+1
 
         for (;;) {
-            $focus = \substr($a, 0, $z);
+            $focus = \substr((string) $a, 0, $z);
 
             $cmp = $this->doCmp($focus, $b);
 
@@ -506,13 +566,16 @@ class NativeCalculator extends Calculator
             $q = $this->add($q, '1' . $zeros);
             $a = $this->sub($a, $b . $zeros);
 
+            /**
+            * @var numeric|'0'
+            */
             $r = $a;
 
             if ($r === '0') { // remainder == 0
                 break;
             }
 
-            $x = \strlen($a);
+            $x = \strlen((string) $a);
 
             if ($x < $y) { // remainder < dividend
                 break;
@@ -574,5 +637,30 @@ class NativeCalculator extends Calculator
         }
 
         return $x;
+    }
+
+    /**
+    * @return array{0:numeric, 1:numeric}
+    */
+    protected static function TypeHintNumeric(string $a, string $b) : array
+    {
+        /**
+        * @var array{0:numeric, 1:numeric}
+        */
+        return [$a, $b];
+    }
+
+    /**
+    * @param numeric $a
+    * @param numeric $b
+    *
+    * @return array{0:string, 1:string}
+    */
+    protected static function TypeHintString($a, $b) : array
+    {
+        /**
+        * @var array{0:string, 1:string}
+        */
+        return [$a, $b];
     }
 }

@@ -42,7 +42,7 @@ class BcMathCalculator extends Calculator
      */
     public function divQ(string $a, string $b) : string
     {
-        return \bcdiv($a, $b, 0);
+        return (string) \bcdiv($a, $b, 0);
     }
 
     /**
@@ -50,7 +50,7 @@ class BcMathCalculator extends Calculator
      */
     public function divR(string $a, string $b) : string
     {
-        return \bcmod($a, $b);
+        return (string) \bcmod($a, $b);
     }
 
     /**
@@ -58,8 +58,8 @@ class BcMathCalculator extends Calculator
      */
     public function divQR(string $a, string $b) : array
     {
-        $q = \bcdiv($a, $b, 0);
-        $r = \bcmod($a, $b);
+        $q = (string) \bcdiv($a, $b, 0);
+        $r = (string) \bcmod($a, $b);
 
         return [$q, $r];
     }

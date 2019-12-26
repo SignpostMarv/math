@@ -20,11 +20,11 @@ class BigNumberTest extends AbstractTestCase
     /**
      * @dataProvider providerSum
      *
-     * @param array  $values        The values to add.
-     * @param string $expectedClass The expected class name.
+     * @param list<BigNumber|int|float|string> $values        The values to add.
+     * @param class-string<BigNumber> $expectedClass The expected class name.
      * @param string $expectedSum   The expected sum.
      */
-    public function testSum(array $values, string $expectedClass, string $expectedSum)
+    public function testSum(array $values, string $expectedClass, string $expectedSum) : void
     {
         $sum = BigNumber::sum(...$values);
 
@@ -33,9 +33,9 @@ class BigNumberTest extends AbstractTestCase
     }
 
     /**
-     * @return array
+     * @return list<array{0:list<BigNumber|int|float|string>, 1:class-string<BigNumber>, 2:string}>
      */
-    public function providerSum()
+    public function providerSum() : array
     {
         return [
             [[-1], BigInteger::class, '-1'],

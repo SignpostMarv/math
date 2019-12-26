@@ -19,6 +19,8 @@ final class RoundingMode
      * Private constructor. This class is not instantiable.
      *
      * @codeCoverageIgnore
+     *
+     * @psalm-suppress UnusedMethod
      */
     private function __construct()
     {
