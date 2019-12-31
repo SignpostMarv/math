@@ -24,14 +24,6 @@ class BcMathCalculator extends Calculator
     /**
      * {@inheritdoc}
      */
-    public function sub(string $a, string $b) : string
-    {
-        return \bcsub($a, $b, 0);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function mul(string $a, string $b) : string
     {
         return \bcmul($a, $b, 0);

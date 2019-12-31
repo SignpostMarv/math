@@ -84,16 +84,6 @@ abstract class Calculator
     abstract public function add(string $a, string $b) : string;
 
     /**
-     * Subtracts two numbers.
-     *
-     * @param string $a The minuend.
-     * @param string $b The subtrahend.
-     *
-     * @return string The difference.
-     */
-    abstract public function sub(string $a, string $b) : string;
-
-    /**
      * Multiplies two numbers.
      *
      * @param string $a The multiplicand.

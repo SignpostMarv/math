@@ -318,6 +318,8 @@ abstract class AbstractCalculatorTest extends AbstractTestCase
             ['2500692630577003661291596854860146627030', $base95, '(Pszub<V3^Y]cs\YnU}o'],
             ['76088698829341245347114640636745832062447993955533', $base95, '2;t?i8zv}hWZ> )loCj(d7*yO3'],
             ['949872477171550708823123033931693463913459064733934993892215', $base95, '4ed~yPcS~L3d)w}!A!%R5_4Dx9u;B?0'],
+
+            ['994495526373444232246567036253784322009', Calculator::ALPHABET, '18akqxs3wbt1320enhlitkne8p'],
         ];
     }
 

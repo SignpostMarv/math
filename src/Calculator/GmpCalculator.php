@@ -23,14 +23,6 @@ class GmpCalculator extends Calculator
     /**
      * {@inheritdoc}
      */
-    public function sub(string $a, string $b) : string
-    {
-        return \gmp_strval(\gmp_sub($a, $b));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function mul(string $a, string $b) : string
     {
         return \gmp_strval(\gmp_mul($a, $b));
@@ -54,12 +46,6 @@ class GmpCalculator extends Calculator
      */
     public function fromBase(string $number, int $base) : string
     {
-        if ($base < 2 || $base > 36) {
-            throw new InvalidArgumentException(
-                'Argument 2 must be between 2 and 36'
-            );
-        }
-
         return \gmp_strval(\gmp_init($number, $base));
     }
 

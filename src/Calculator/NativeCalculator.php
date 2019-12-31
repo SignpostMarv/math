@@ -89,9 +89,14 @@ class NativeCalculator extends Calculator
     }
 
     /**
-     * {@inheritdoc}
+     * Subtracts two numbers.
+     *
+     * @param string $a The minuend.
+     * @param string $b The subtrahend.
+     *
+     * @return string The difference.
      */
-    public function sub(string $a, string $b) : string
+    protected function sub(string $a, string $b) : string
     {
         return $this->add($a, $this->neg($b));
     }
