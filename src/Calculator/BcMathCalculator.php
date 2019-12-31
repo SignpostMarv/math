@@ -13,30 +13,30 @@ use SignpostMarv\Brick\Math\Calculator;
  */
 class BcMathCalculator extends Calculator
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function add(string $a, string $b) : string
-    {
-        return \bcadd($a, $b, 0);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function add(string $a, string $b) : string
+	{
+		return \bcadd($a, $b, 0);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function mul(string $a, string $b) : string
-    {
-        return \bcmul($a, $b, 0);
-    }
+	/**
+	 * {@inheritdoc}
+	 */
+	public function mul(string $a, string $b) : string
+	{
+		return \bcmul($a, $b, 0);
+	}
 
-    /**
-     * {@inheritdoc}
-     */
-    public function divQR(string $a, string $b) : array
-    {
-        $q = (string) \bcdiv($a, $b, 0);
-        $r = (string) \bcmod($a, $b);
+	/**
+	 * {@inheritdoc}
+	 */
+	public function divQR(string $a, string $b) : array
+	{
+		$q = (string) \bcdiv($a, $b, 0);
+		$r = (string) \bcmod($a, $b);
 
-        return [$q, $r];
-    }
+		return [$q, $r];
+	}
 }

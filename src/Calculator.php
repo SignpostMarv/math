@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace SignpostMarv\Brick\Math;
 
 use function dechex;
+use InvalidArgumentException;
 use function ltrim;
 use function ord;
 use function preg_match;
-use function strlen;
-use function strtoupper;
 use function trim;
-use InvalidArgumentException;
 
 /**
  * Performs basic operations on arbitrary size integers.
@@ -24,267 +22,267 @@ use InvalidArgumentException;
  */
 abstract class Calculator
 {
-    /**
-     * The alphabet for converting from and to base 2 to 36, lowercase.
-     */
-    public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
+	/**
+	 * The alphabet for converting from and to base 2 to 36, lowercase.
+	 */
+	public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 
-    const BASE2 = 2;
+	const BASE2 = 2;
 
-    const BASE36 = 36;
+	const BASE36 = 36;
 
-    const ORD10 = 10;
+	const ORD10 = 10;
 
-    const ORD32 = 32;
+	const ORD32 = 32;
 
-    const ORD126 = 126;
+	const ORD126 = 126;
 
-    /**
-     * Extracts the digits and sign of the operands.
-     *
-     * @param string $a    The first operand.
-     * @param string $b    The second operand.
-     *
-     * @return array{0:string, 1:string, 2:bool, 3:bool} the digits of the first operand, the digits of the second operand, whether the first operand is negative, whether the second operand is negative.
-     */
-    final protected function init(string $a, string $b) : array
-    {
-        $aNeg = ($a[0] === '-');
-        $bNeg = ($b[0] === '-');
+	/**
+	 * Negates a number.
+	 *
+	 * @param string $n the number
+	 *
+	 * @return string the negated value
+	 */
+	final public function neg(string $n) : string
+	{
+		if ('0' === $n) {
+			return '0';
+		}
 
-        $aDig = $aNeg ? \substr($a, 1) : $a;
-        $bDig = $bNeg ? \substr($b, 1) : $b;
+		if ('-' === $n[0]) {
+			return \mb_substr($n, 1);
+		}
 
-        return [
-            $aDig,
-            $bDig,
-            $aNeg,
-            $bNeg,
-        ];
-    }
+		return '-' . $n;
+	}
 
-    /**
-     * Negates a number.
-     *
-     * @param string $n The number.
-     *
-     * @return string The negated value.
-     */
-    final public function neg(string $n) : string
-    {
-        if ($n === '0') {
-            return '0';
-        }
+	/**
+	 * Adds two numbers.
+	 *
+	 * @param string $a the augend
+	 * @param string $b the addend
+	 *
+	 * @return string the sum
+	 */
+	abstract public function add(string $a, string $b) : string;
 
-        if ($n[0] === '-') {
-            return \substr($n, 1);
-        }
+	/**
+	 * Multiplies two numbers.
+	 *
+	 * @param string $a the multiplicand
+	 * @param string $b the multiplier
+	 *
+	 * @return string the product
+	 */
+	abstract public function mul(string $a, string $b) : string;
 
-        return '-' . $n;
-    }
+	/**
+	 * Returns the quotient and remainder of the division of two numbers.
+	 *
+	 * @param string $a the dividend
+	 * @param string $b the divisor, must not be zero
+	 *
+	 * @return array{0:string, 1:string} An array containing the quotient and remainder
+	 */
+	abstract public function divQR(string $a, string $b) : array;
 
-    /**
-     * Adds two numbers.
-     *
-     * @param string $a The augend.
-     * @param string $b The addend.
-     *
-     * @return string The sum.
-     */
-    abstract public function add(string $a, string $b) : string;
+	/**
+	 * Converts a number from an arbitrary base.
+	 *
+	 * This method can be overridden by the concrete implementation if the underlying library
+	 * has built-in support for base conversion.
+	 *
+	 * @param string $number the number, positive or zero, non-empty, case-insensitively validated for the given base
+	 * @param int    $base   the base of the number, validated from 2 to 36
+	 *
+	 * @return string the converted number, following the Calculator conventions
+	 */
+	public function fromBase(string $number, int $base) : string
+	{
+		return $this->fromArbitraryBase(\mb_strtolower($number), self::ALPHABET, $base);
+	}
 
-    /**
-     * Multiplies two numbers.
-     *
-     * @param string $a The multiplicand.
-     * @param string $b The multiplier.
-     *
-     * @return string The product.
-     */
-    abstract public function mul(string $a, string $b) : string;
+	/**
+	 * Converts a number to an arbitrary base.
+	 *
+	 * This method can be overridden by the concrete implementation if the underlying library
+	 * has built-in support for base conversion.
+	 *
+	 * @param string $number the number to convert, following the Calculator conventions
+	 * @param int    $base   the base to convert to, validated from 2 to 36
+	 *
+	 * @return string the converted number, lowercase
+	 */
+	public function toBase(string $number, int $base) : string
+	{
+		if ($base < self::BASE2 || $base > self::BASE36) {
+			throw new InvalidArgumentException(
+				'Argument 2 must be between 2 and 36'
+			);
+		}
 
-    /**
-     * Returns the quotient and remainder of the division of two numbers.
-     *
-     * @param string $a The dividend.
-     * @param string $b The divisor, must not be zero.
-     *
-     * @return array{0:string, 1:string} An array containing the quotient and remainder.
-     */
-    abstract public function divQR(string $a, string $b) : array;
+		$negative = ('-' === $number[0]);
 
-    /**
-     * Converts a number from an arbitrary base.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for base conversion.
-     *
-     * @param string $number The number, positive or zero, non-empty, case-insensitively validated for the given base.
-     * @param int    $base   The base of the number, validated from 2 to 36.
-     *
-     * @return string The converted number, following the Calculator conventions.
-     */
-    public function fromBase(string $number, int $base) : string
-    {
-        return $this->fromArbitraryBase(\strtolower($number), self::ALPHABET, $base);
-    }
+		if ($negative) {
+			$number = \mb_substr($number, 1);
+		}
 
-    /**
-     * Converts a number to an arbitrary base.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for base conversion.
-     *
-     * @param string $number The number to convert, following the Calculator conventions.
-     * @param int    $base   The base to convert to, validated from 2 to 36.
-     *
-     * @return string The converted number, lowercase.
-     */
-    public function toBase(string $number, int $base) : string
-    {
-        if ($base < self::BASE2 || $base > self::BASE36) {
-            throw new InvalidArgumentException(
-                'Argument 2 must be between 2 and 36'
-            );
-        }
+		$number = $this->toArbitraryBase($number, self::ALPHABET, $base);
 
-        $negative = ($number[0] === '-');
+		if ($negative) {
+			return '-' . $number;
+		}
 
-        if ($negative) {
-            $number = \substr($number, 1);
-        }
+		return $number;
+	}
 
-        $number = $this->toArbitraryBase($number, self::ALPHABET, $base);
+	/**
+	 * Converts a non-negative number in an arbitrary base using a custom alphabet, to base 10.
+	 *
+	 * @param string $number   the number to convert, validated as a non-empty string,
+	 *                         containing only chars in the given alphabet/base
+	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
+	 * @param int    $base     the base of the number, validated from 2 to alphabet length
+	 *
+	 * @return string the number in base 10, following the Calculator conventions
+	 */
+	final public function fromArbitraryBase(string $number, string $alphabet, int $base) : string
+	{
+		$this->ValidateAlphabet($number, $alphabet);
 
-        if ($negative) {
-            return '-' . $number;
-        }
+		// remove leading "zeros"
+		$number = ltrim($number, $alphabet[0]);
 
-        return $number;
-    }
+		if ('' === $number) {
+			return '0';
+		}
 
-    /**
-     * Converts a non-negative number in an arbitrary base using a custom alphabet, to base 10.
-     *
-     * @param string $number   The number to convert, validated as a non-empty string,
-     *                         containing only chars in the given alphabet/base.
-     * @param string $alphabet The alphabet that contains every digit, validated as 2 chars minimum.
-     * @param int    $base     The base of the number, validated from 2 to alphabet length.
-     *
-     * @return string The number in base 10, following the Calculator conventions.
-     */
-    final public function fromArbitraryBase(string $number, string $alphabet, int $base) : string
-    {
-        $this->ValidateAlphabet($number, $alphabet);
+		// optimize for "one"
+		if ($number === $alphabet[1]) {
+			return '1';
+		}
 
-        // remove leading "zeros"
-        $number = ltrim($number, $alphabet[0]);
+		$result = '0';
+		$power = '1';
 
-        if ($number === '') {
-            return '0';
-        }
+		$base = (string) $base;
 
-        // optimize for "one"
-        if ($number === $alphabet[1]) {
-            return '1';
-        }
+		for ($i = \mb_strlen($number) - 1; $i >= 0; --$i) {
+			$index = \mb_strpos($alphabet, $number[$i]);
 
-        $result = '0';
-        $power = '1';
+			if (0 !== $index) {
+				$result = $this->add($result, (1 === $index)
+					? $power
+					: $this->mul($power, (string) $index)
+				);
+			}
 
-        $base = (string) $base;
+			if (0 !== $i) {
+				$power = $this->mul($power, $base);
+			}
+		}
 
-        for ($i = \strlen($number) - 1; $i >= 0; $i--) {
-            $index = \strpos($alphabet, $number[$i]);
+		return $result;
+	}
 
-            if ($index !== 0) {
-                $result = $this->add($result, ($index === 1)
-                    ? $power
-                    : $this->mul($power, (string) $index)
-                );
-            }
+	/**
+	 * Converts a non-negative number to an arbitrary base using a custom alphabet.
+	 *
+	 * @param string $number   the number to convert, positive or zero, following the Calculator conventions
+	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
+	 * @param int    $base     the base to convert to, validated from 2 to alphabet length
+	 *
+	 * @return string the converted number in the given alphabet
+	 */
+	final public function toArbitraryBase(string $number, string $alphabet, int $base) : string
+	{
+		$number = trim($number);
 
-            if ($i !== 0) {
-                $power = $this->mul($power, $base);
-            }
-        }
+		if ('-' === ($number[0] ?? '')) {
+			throw new InvalidArgumentException(
+				'toArbitraryBase() does not support negative numbers.'
+			);
+		}
 
-        return $result;
-    }
+		$this->ValidateAlphabet($alphabet[0] ?? '0', $alphabet);
 
-    /**
-     * Converts a non-negative number to an arbitrary base using a custom alphabet.
-     *
-     * @param string $number   The number to convert, positive or zero, following the Calculator conventions.
-     * @param string $alphabet The alphabet that contains every digit, validated as 2 chars minimum.
-     * @param int    $base     The base to convert to, validated from 2 to alphabet length.
-     *
-     * @return string The converted number in the given alphabet.
-     */
-    final public function toArbitraryBase(string $number, string $alphabet, int $base) : string
-    {
-        $number = trim($number);
+		if ('0' === $number) {
+			return $alphabet[0];
+		}
 
-        if ('-' === ($number[0] ?? '')) {
-            throw new InvalidArgumentException(
-                'toArbitraryBase() does not support negative numbers.'
-            );
-        }
+		$base = (string) $base;
+		$result = '';
 
-        $this->ValidateAlphabet($alphabet[0] ?? '0', $alphabet);
+		while ('0' !== $number) {
+			[$number, $remainder] = $this->divQR($number, $base);
+			$remainder = (int) $remainder;
 
-        if ($number === '0') {
-            return $alphabet[0];
-        }
+			$result .= $alphabet[$remainder];
+		}
 
-        $base = (string) $base;
-        $result = '';
+		return \strrev($result);
+	}
 
-        while ($number !== '0') {
-            [$number, $remainder] = $this->divQR($number, $base);
-            $remainder = (int) $remainder;
+	/**
+	 * Extracts the digits and sign of the operands.
+	 *
+	 * @param string $a the first operand
+	 * @param string $b the second operand
+	 *
+	 * @return array{0:string, 1:string, 2:bool, 3:bool} the digits of the first operand, the digits of the second operand, whether the first operand is negative, whether the second operand is negative
+	 */
+	final protected function init(string $a, string $b) : array
+	{
+		$aNeg = ('-' === $a[0]);
+		$bNeg = ('-' === $b[0]);
 
-            $result .= $alphabet[$remainder];
-        }
+		$aDig = $aNeg ? \mb_substr($a, 1) : $a;
+		$bDig = $bNeg ? \mb_substr($b, 1) : $b;
 
-        return \strrev($result);
-    }
+		return [
+			$aDig,
+			$bDig,
+			$aNeg,
+			$bNeg,
+		];
+	}
 
-    protected function ValidateAlphabet(string $number, string $alphabet) : void
-    {
-        if ('' === $number) {
-            throw new InvalidArgumentException(
-                'The number cannot be empty.'
-            );
-        }
+	protected function ValidateAlphabet(string $number, string $alphabet) : void
+	{
+		if ('' === $number) {
+			throw new InvalidArgumentException(
+				'The number cannot be empty.'
+			);
+		}
 
-        if (strlen($alphabet) < self::BASE2) {
-            throw new InvalidArgumentException(
-                'The alphabet must contain at least 2 chars.'
-            );
-        }
+		if (mb_strlen($alphabet) < self::BASE2) {
+			throw new InvalidArgumentException(
+				'The alphabet must contain at least 2 chars.'
+			);
+		}
 
-        $pattern = '/[^' . \preg_quote($alphabet, '/') . ']/';
+		$pattern = '/[^' . \preg_quote($alphabet, '/') . ']/';
 
-        if (preg_match($pattern, $number, $matches) === 1) {
-            $char = $matches[0];
+		if (1 === preg_match($pattern, $number, $matches)) {
+			$char = $matches[0];
 
-            $ord = ord($char);
+			$ord = ord($char);
 
-            if ($ord < self::ORD32 || $ord > self::ORD126) {
-                $char = strtoupper(dechex($ord));
+			if ($ord < self::ORD32 || $ord > self::ORD126) {
+				$char = mb_strtoupper(dechex($ord));
 
-                if ($ord < self::ORD10) {
-                    $char = '0' . $char;
-                }
-            } else {
-                $char = '"' . $char . '"';
-            }
+				if ($ord < self::ORD10) {
+					$char = '0' . $char;
+				}
+			} else {
+				$char = '"' . $char . '"';
+			}
 
-            throw new InvalidArgumentException(sprintf(
-                'Char %s is not a valid character in the given alphabet.',
-                $char
-            ));
-        }
-    }
+			throw new InvalidArgumentException(sprintf(
+				'Char %s is not a valid character in the given alphabet.',
+				$char
+			));
+		}
+	}
 }

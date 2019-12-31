@@ -12,5 +12,5 @@ use SignpostMarv\Brick\Math\Calculator;
  */
 abstract class AbstractTestCase extends TestCase
 {
-    abstract protected function ObtainCalculator() : Calculator;
+	abstract protected function ObtainCalculator() : Calculator;
 }
