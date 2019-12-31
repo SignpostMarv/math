@@ -7,16 +7,16 @@ namespace SignpostMarv\Brick\Math\Tests\Calculator;
 use Generator;
 use InvalidArgumentException;
 use SignpostMarv\Brick\Math\Calculator;
-use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
+use SignpostMarv\Brick\Math\Calculator\GmpCalculator;
 use SignpostMarv\Brick\Math\Tests\AbstractTestCase;
 
 /**
- * Unit tests for class NativeCalculator.
+ * Unit tests for class GmpCalculator.
  */
-class NativeCalculatorTest extends AbstractCalculatorTest
+class GmpCalculatorTest extends AbstractCalculatorTest
 {
     protected function ObtainCalculator() : Calculator
     {
-        return new NativeCalculator();
+        return new GmpCalculator();
     }
 }

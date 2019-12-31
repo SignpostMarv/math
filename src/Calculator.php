@@ -30,61 +30,6 @@ abstract class Calculator
     public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 
     /**
-     * The Calculator instance in use.
-     */
-    private static ? Calculator $instance = null;
-
-    /**
-     * Sets the Calculator instance to use.
-     *
-     * An instance is typically set only in unit tests: the autodetect is usually the best option.
-     *
-     * @param Calculator|null $calculator The calculator instance, or NULL to revert to autodetect.
-     *
-     * @return void
-     */
-    final public static function set(?Calculator $calculator) : void
-    {
-        self::$instance = $calculator;
-    }
-
-    /**
-     * Returns the Calculator instance to use.
-     *
-     * If none has been explicitly set, the fastest available implementation will be returned.
-     *
-     * @return Calculator
-     */
-    final public static function get() : Calculator
-    {
-        if (self::$instance === null) {
-            self::$instance = self::detect();
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * Returns the fastest available Calculator implementation.
-     *
-     * @codeCoverageIgnore
-     *
-     * @return Calculator
-     */
-    private static function detect() : Calculator
-    {
-        if (\extension_loaded('gmp')) {
-            return new Calculator\GmpCalculator();
-        }
-
-        if (\extension_loaded('bcmath')) {
-            return new Calculator\BcMathCalculator();
-        }
-
-        return new Calculator\NativeCalculator();
-    }
-
-    /**
      * Extracts the digits and sign of the operands.
      *
      * @param string $a    The first operand.

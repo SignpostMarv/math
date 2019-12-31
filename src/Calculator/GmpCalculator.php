@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SignpostMarv\Brick\Math\Calculator;
 
+use InvalidArgumentException;
 use SignpostMarv\Brick\Math\Calculator;
 
 /**
@@ -53,6 +54,12 @@ class GmpCalculator extends Calculator
      */
     public function fromBase(string $number, int $base) : string
     {
+        if ($base < 2 || $base > 36) {
+            throw new InvalidArgumentException(
+                'Argument 2 must be between 2 and 36'
+            );
+        }
+
         return \gmp_strval(\gmp_init($number, $base));
     }
 
@@ -61,6 +68,12 @@ class GmpCalculator extends Calculator
      */
     public function toBase(string $number, int $base) : string
     {
+        if ($base < 2 || $base > 36) {
+            throw new InvalidArgumentException(
+                'Argument 2 must be between 2 and 36'
+            );
+        }
+
         return \gmp_strval($number, $base);
     }
 }

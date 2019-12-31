@@ -16,7 +16,9 @@
         "vimeo/psalm": "^3.8",
         "psalm/plugin-phpunit": "dev-master",
         "php-coveralls/php-coveralls": "^2.2",
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "ext-gmp": "*",
+        "ext-bcmath": "*"
     },
 	"conflict": {
 		"vimeo/psalm": "<3.8"

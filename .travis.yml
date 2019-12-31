@@ -3,11 +3,6 @@ language: php
 php:
   - 7.4
 
-env:
-  - CALCULATOR=GMP
-  - CALCULATOR=BCMath
-  - CALCULATOR=Native
-
 before_script:
   - composer install
 
