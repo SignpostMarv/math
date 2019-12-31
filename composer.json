@@ -9,16 +9,20 @@
         "Arbitrary Base Conversion"
     ],
     "license": "MIT",
+	"config": {
+		"classmap-authoritative": true,
+		"sort-packages": true
+	},
     "require": {
         "php": "^7.4"
     },
     "require-dev": {
-        "vimeo/psalm": "^3.8",
-        "psalm/plugin-phpunit": "dev-master",
+        "ext-bcmath": "*",
+        "ext-gmp": "*",
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^8.5",
-        "ext-gmp": "*",
-        "ext-bcmath": "*"
+        "psalm/plugin-phpunit": "dev-master",
+        "vimeo/psalm": "^3.8"
     },
 	"conflict": {
 		"vimeo/psalm": "<3.8"
