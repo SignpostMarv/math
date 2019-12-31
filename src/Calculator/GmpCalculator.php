@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Brick\Math\Internal\Calculator;
+namespace SignpostMarv\Brick\Math\Calculator;
 
-use Brick\Math\Internal\Calculator;
+use SignpostMarv\Brick\Math\Calculator;
 
 /**
  * Calculator implementation built around the GMP library.
- *
- * @internal
  */
 class GmpCalculator extends Calculator
 {

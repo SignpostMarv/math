@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Brick\Math\Tests;
+namespace SignpostMarv\Brick\Math\Tests;
 
-use Brick\Math\Internal\Calculator;
+use SignpostMarv\Brick\Math\Calculator;
 
 use PHPUnit\Framework\TestCase;
 

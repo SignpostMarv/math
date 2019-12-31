@@ -23,12 +23,12 @@
 	},
     "autoload": {
         "psr-4": {
-            "Brick\\Math\\": "src/"
+            "SignpostMarv\\Brick\\Math\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Brick\\Math\\Tests\\": "tests/"
+            "SignpostMarv\\Brick\\Math\\Tests\\": "tests/"
         }
     }
 }

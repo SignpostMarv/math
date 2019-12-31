@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Brick\Math\Tests;
+namespace SignpostMarv\Brick\Math\Tests;
 
 use PHPUnit\Framework\TestCase;
 

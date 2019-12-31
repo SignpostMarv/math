@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Brick\Math\Tests\Internal\Calculator;
+namespace SignpostMarv\Brick\Math\Tests\Calculator;
 
-use Brick\Math\Internal\Calculator\NativeCalculator;
-use Brick\Math\Tests\AbstractTestCase;
+use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
+use SignpostMarv\Brick\Math\Tests\AbstractTestCase;
 
 /**
  * Unit tests for class NativeCalculator.

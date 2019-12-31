@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Brick\Math\Internal;
+namespace SignpostMarv\Brick\Math;
 
 /**
  * Performs basic operations on arbitrary size integers.
@@ -12,8 +12,6 @@ namespace Brick\Math\Internal;
  *
  * Any other parameter format will lead to undefined behaviour.
  * All methods must return strings respecting this format, unless specified otherwise.
- *
- * @internal
  */
 abstract class Calculator
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Brick\Math\Internal\Calculator;
+use SignpostMarv\Brick\Math\Calculator;
 
 require __DIR__ . '/vendor/autoload.php';
 
