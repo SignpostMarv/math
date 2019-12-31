@@ -17,11 +17,14 @@
         "php": "^7.4"
     },
     "require-dev": {
-        "vimeo/psalm": "^3.7",
-        "psalm/plugin-phpunit": "^0.8.0",
+        "vimeo/psalm": "^3.8",
+        "psalm/plugin-phpunit": "dev-master",
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^8.5"
     },
+	"conflict": {
+		"vimeo/psalm": "<3.8"
+	},
     "autoload": {
         "psr-4": {
             "Brick\\Math\\": "src/"
