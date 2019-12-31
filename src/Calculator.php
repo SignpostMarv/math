@@ -4,6 +4,15 @@ declare(strict_types=1);
 
 namespace SignpostMarv\Brick\Math;
 
+use function dechex;
+use function ltrim;
+use function ord;
+use function preg_match;
+use function strlen;
+use function strtoupper;
+use function trim;
+use InvalidArgumentException;
+
 /**
  * Performs basic operations on arbitrary size integers.
  *
@@ -188,6 +197,12 @@ abstract class Calculator
      */
     public function toBase(string $number, int $base) : string
     {
+        if ($base < 2 || $base > 36) {
+            throw new InvalidArgumentException(
+                'Argument 2 must be between 2 and 36'
+            );
+        }
+
         $negative = ($number[0] === '-');
 
         if ($negative) {
@@ -215,8 +230,10 @@ abstract class Calculator
      */
     final public function fromArbitraryBase(string $number, string $alphabet, int $base) : string
     {
+        $this->ValidateAlphabet($number, $alphabet);
+
         // remove leading "zeros"
-        $number = \ltrim($number, $alphabet[0]);
+        $number = ltrim($number, $alphabet[0]);
 
         if ($number === '') {
             return '0';
@@ -261,6 +278,16 @@ abstract class Calculator
      */
     final public function toArbitraryBase(string $number, string $alphabet, int $base) : string
     {
+        $number = trim($number);
+
+        if ('-' === ($number[0] ?? '')) {
+            throw new InvalidArgumentException(
+                'toArbitraryBase() does not support negative numbers.'
+            );
+        }
+
+        $this->ValidateAlphabet($alphabet[0] ?? '0', $alphabet);
+
         if ($number === '0') {
             return $alphabet[0];
         }
@@ -276,5 +303,43 @@ abstract class Calculator
         }
 
         return \strrev($result);
+    }
+
+    protected function ValidateAlphabet(string $number, string $alphabet) : void
+    {
+        if ('' === $number) {
+            throw new InvalidArgumentException(
+                'The number cannot be empty.'
+            );
+        }
+
+        if (strlen($alphabet) < 2) {
+            throw new InvalidArgumentException(
+                'The alphabet must contain at least 2 chars.'
+            );
+        }
+
+        $pattern = '/[^' . \preg_quote($alphabet, '/') . ']/';
+
+        if (preg_match($pattern, $number, $matches) === 1) {
+            $char = $matches[0];
+
+            $ord = ord($char);
+
+            if ($ord < 32 || $ord > 126) {
+                $char = strtoupper(dechex($ord));
+
+                if ($ord < 10) {
+                    $char = '0' . $char;
+                }
+            } else {
+                $char = '"' . $char . '"';
+            }
+
+            throw new InvalidArgumentException(sprintf(
+                'Char %s is not a valid character in the given alphabet.',
+                $char
+            ));
+        }
     }
 }
