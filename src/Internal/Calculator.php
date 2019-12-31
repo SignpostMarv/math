@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Brick\Math\Internal;
 
-use Brick\Math\RoundingMode;
-use Brick\Math\Exception\RoundingNecessaryException;
-
 /**
  * Performs basic operations on arbitrary size integers.
  *
@@ -20,11 +17,6 @@ use Brick\Math\Exception\RoundingNecessaryException;
  */
 abstract class Calculator
 {
-    /**
-     * The maximum exponent value allowed for the pow() method.
-     */
-    public const MAX_POWER = 1000000;
-
     /**
      * The alphabet for converting from and to base 2 to 36, lowercase.
      */
@@ -110,18 +102,6 @@ abstract class Calculator
     }
 
     /**
-     * Returns the absolute value of a number.
-     *
-     * @param string $n The number.
-     *
-     * @return string The absolute value.
-     */
-    final public function abs(string $n) : string
-    {
-        return ($n[0] === '-') ? \substr($n, 1) : $n;
-    }
-
-    /**
      * Negates a number.
      *
      * @param string $n The number.
@@ -139,40 +119,6 @@ abstract class Calculator
         }
 
         return '-' . $n;
-    }
-
-    /**
-     * Compares two numbers.
-     *
-     * @param string $a The first number.
-     * @param string $b The second number.
-     *
-     * @return int [-1, 0, 1] If the first number is less than, equal to, or greater than the second number.
-     */
-    final public function cmp(string $a, string $b) : int
-    {
-        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
-
-        if ($aNeg && ! $bNeg) {
-            return -1;
-        }
-
-        if ($bNeg && ! $aNeg) {
-            return 1;
-        }
-
-        $aLen = \strlen($aDig);
-        $bLen = \strlen($bDig);
-
-        if ($aLen < $bLen) {
-            $result = -1;
-        } elseif ($aLen > $bLen) {
-            $result = 1;
-        } else {
-            $result = $aDig <=> $bDig;
-        }
-
-        return $aNeg ? -$result : $result;
     }
 
     /**
@@ -206,26 +152,6 @@ abstract class Calculator
     abstract public function mul(string $a, string $b) : string;
 
     /**
-     * Returns the quotient of the division of two numbers.
-     *
-     * @param string $a The dividend.
-     * @param string $b The divisor, must not be zero.
-     *
-     * @return string The quotient.
-     */
-    abstract public function divQ(string $a, string $b) : string;
-
-    /**
-     * Returns the remainder of the division of two numbers.
-     *
-     * @param string $a The dividend.
-     * @param string $b The divisor, must not be zero.
-     *
-     * @return string The remainder.
-     */
-    abstract public function divR(string $a, string $b) : string;
-
-    /**
      * Returns the quotient and remainder of the division of two numbers.
      *
      * @param string $a The dividend.
@@ -234,52 +160,6 @@ abstract class Calculator
      * @return array{0:string, 1:string} An array containing the quotient and remainder.
      */
     abstract public function divQR(string $a, string $b) : array;
-
-    /**
-     * Exponentiates a number.
-     *
-     * @param string $a The base.
-     * @param int    $e The exponent, validated as an integer between 0 and MAX_POWER.
-     *
-     * @return string The power.
-     */
-    abstract public function pow(string $a, int $e) : string;
-
-    /**
-     * Returns the greatest common divisor of the two numbers.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for GCD calculations.
-     *
-     * @param string $a The first number.
-     * @param string $b The second number.
-     *
-     * @return string The GCD, always positive, or zero if both arguments are zero.
-     */
-    public function gcd(string $a, string $b) : string
-    {
-        if ($a === '0') {
-            return $this->abs($b);
-        }
-
-        if ($b === '0') {
-            return $this->abs($a);
-        }
-
-        return $this->gcd($b, $this->divR($a, $b));
-    }
-
-    /**
-     * Returns the square root of the given number, rounded down.
-     *
-     * The result is the largest x such that x² ≤ n.
-     * The input MUST NOT be negative.
-     *
-     * @param string $n The number.
-     *
-     * @return string The square root.
-     */
-    abstract public function sqrt(string $n) : string;
 
     /**
      * Converts a number from an arbitrary base.
@@ -398,273 +278,5 @@ abstract class Calculator
         }
 
         return \strrev($result);
-    }
-
-    /**
-     * Performs a rounded division.
-     *
-     * Rounding is performed when the remainder of the division is not zero.
-     *
-     * @param string $a            The dividend.
-     * @param string $b            The divisor.
-     * @param int    $roundingMode The rounding mode.
-     *
-     * @return string
-     *
-     * @throws \InvalidArgumentException  If the rounding mode is invalid.
-     * @throws RoundingNecessaryException If RoundingMode::UNNECESSARY is provided but rounding is necessary.
-     */
-    final public function divRound(string $a, string $b, int $roundingMode) : string
-    {
-        [$quotient, $remainder] = $this->divQR($a, $b);
-
-        $hasDiscardedFraction = ($remainder !== '0');
-        $isPositiveOrZero = ($a[0] === '-') === ($b[0] === '-');
-
-        $discardedFractionSign = function() use ($remainder, $b) : int {
-            $r = $this->abs($this->mul($remainder, '2'));
-            $b = $this->abs($b);
-
-            return $this->cmp($r, $b);
-        };
-
-        $increment = false;
-
-        switch ($roundingMode) {
-            case RoundingMode::UNNECESSARY:
-                if ($hasDiscardedFraction) {
-                    throw RoundingNecessaryException::roundingNecessary();
-                }
-                break;
-
-            case RoundingMode::UP:
-                $increment = $hasDiscardedFraction;
-                break;
-
-            case RoundingMode::DOWN:
-                break;
-
-            case RoundingMode::CEILING:
-                $increment = $hasDiscardedFraction && $isPositiveOrZero;
-                break;
-
-            case RoundingMode::FLOOR:
-                $increment = $hasDiscardedFraction && ! $isPositiveOrZero;
-                break;
-
-            case RoundingMode::HALF_UP:
-                $increment = $discardedFractionSign() >= 0;
-                break;
-
-            case RoundingMode::HALF_DOWN:
-                $increment = $discardedFractionSign() > 0;
-                break;
-
-            case RoundingMode::HALF_CEILING:
-                $increment = $isPositiveOrZero ? $discardedFractionSign() >= 0 : $discardedFractionSign() > 0;
-                break;
-
-            case RoundingMode::HALF_FLOOR:
-                $increment = $isPositiveOrZero ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
-                break;
-
-            case RoundingMode::HALF_EVEN:
-                $lastDigit = (int) $quotient[-1];
-                $lastDigitIsEven = ($lastDigit % 2 === 0);
-                $increment = $lastDigitIsEven ? $discardedFractionSign() > 0 : $discardedFractionSign() >= 0;
-                break;
-
-            default:
-                throw new \InvalidArgumentException('Invalid rounding mode.');
-        }
-
-        if ($increment) {
-            return $this->add($quotient, $isPositiveOrZero ? '1' : '-1');
-        }
-
-        return $quotient;
-    }
-
-    /**
-     * Calculates bitwise AND of two numbers.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for bitwise operations.
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    public function and(string $a, string $b) : string
-    {
-        return $this->bitwise('and', $a, $b);
-    }
-
-    /**
-     * Calculates bitwise OR of two numbers.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for bitwise operations.
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    public function or(string $a, string $b) : string
-    {
-        return $this->bitwise('or', $a, $b);
-    }
-
-    /**
-     * Calculates bitwise XOR of two numbers.
-     *
-     * This method can be overridden by the concrete implementation if the underlying library
-     * has built-in support for bitwise operations.
-     *
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    public function xor(string $a, string $b) : string
-    {
-        return $this->bitwise('xor', $a, $b);
-    }
-
-    /**
-     * Performs a bitwise operation on a decimal number.
-     *
-     * @param 'and'|'or'|'xor' $operator The operator to use, must be "and", "or" or "xor".
-     * @param string $a        The left operand.
-     * @param string $b        The right operand.
-     *
-     * @return string
-     */
-    private function bitwise(string $operator, string $a, string $b) : string
-    {
-        [$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
-
-        $aBin = $this->toBinary($aDig);
-        $bBin = $this->toBinary($bDig);
-
-        $aLen = \strlen($aBin);
-        $bLen = \strlen($bBin);
-
-        if ($aLen > $bLen) {
-            $bBin = \str_repeat("\x00", $aLen - $bLen) . $bBin;
-        } elseif ($bLen > $aLen) {
-            $aBin = \str_repeat("\x00", $bLen - $aLen) . $aBin;
-        }
-
-        if ($aNeg) {
-            $aBin = $this->twosComplement($aBin);
-        }
-        if ($bNeg) {
-            $bBin = $this->twosComplement($bBin);
-        }
-
-        switch ($operator) {
-            case 'and':
-                $value = $aBin & $bBin;
-                $negative = ($aNeg and $bNeg);
-                break;
-
-            case 'or':
-                $value = $aBin | $bBin;
-                $negative = ($aNeg or $bNeg);
-                break;
-
-            case 'xor':
-                $value = $aBin ^ $bBin;
-                $negative = ($aNeg xor $bNeg);
-                break;
-
-            // @codeCoverageIgnoreStart
-            default:
-                throw new \InvalidArgumentException('Invalid bitwise operator.');
-            // @codeCoverageIgnoreEnd
-        }
-
-        if ($negative) {
-            $value = $this->twosComplement($value);
-        }
-
-        $result = $this->toDecimal($value);
-
-        return $negative ? $this->neg($result) : $result;
-    }
-
-    /**
-     * @param string $number A positive, binary number.
-     *
-     * @return string
-     */
-    private function twosComplement(string $number) : string
-    {
-        $xor = \str_repeat("\xff", \strlen($number));
-
-        $number = $number ^ $xor;
-
-        for ($i = \strlen($number) - 1; $i >= 0; $i--) {
-            $byte = \ord($number[$i]);
-
-            if (++$byte !== 256) {
-                $number[$i] = \chr($byte);
-                break;
-            }
-
-            $number[$i] = \chr(0);
-        }
-
-        return $number;
-    }
-
-    /**
-     * Converts a decimal number to a binary string.
-     *
-     * @param string $number The number to convert, positive or zero, only digits.
-     *
-     * @return string
-     */
-    private function toBinary(string $number) : string
-    {
-        $result = '';
-
-        while ($number !== '0') {
-            [$number, $remainder] = $this->divQR($number, '256');
-            $result .= \chr((int) $remainder);
-        }
-
-        return \strrev($result);
-    }
-
-    /**
-     * Returns the positive decimal representation of a binary number.
-     *
-     * @param string $bytes The bytes representing the number.
-     */
-    private function toDecimal(string $bytes) : string
-    {
-        $result = '0';
-        $power = '1';
-
-        for ($i = \strlen($bytes) - 1; $i >= 0; $i--) {
-            $index = \ord($bytes[$i]);
-
-            if ($index !== 0) {
-                $result = $this->add($result, ($index === 1)
-                    ? $power
-                    : $this->mul($power, (string) $index)
-                );
-            }
-
-            if ($i !== 0) {
-                $power = $this->mul($power, '256');
-            }
-        }
-
-        return $result;
     }
 }

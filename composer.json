@@ -1,16 +1,12 @@
 {
-    "name": "brick/math",
-    "description": "Arbitrary-precision arithmetic library",
+    "name": "signpostmarv/brick-math-base-convert",
+    "description": "Arbitrary Base Conversion Library",
     "type": "library",
     "keywords": [
         "Brick",
         "Math",
-        "Arbitrary-precision",
-        "Arithmetic",
         "BigInteger",
-        "BigDecimal",
-        "BigRational",
-        "Bignum"
+        "Arbitrary Base Conversion"
     ],
     "license": "MIT",
     "require": {

@@ -63,31 +63,4 @@ class NativeCalculatorTest extends AbstractTestCase
             ['1234567891234567889999999', '1234567891234567889999999', '1524157878067367851562259605883269630864220000001'],
         ];
     }
-
-    /**
-     * @dataProvider providerPow
-     */
-    public function testPow(string $a, int $b, string $expectedValue) : void
-    {
-        $nativeCalculator = new NativeCalculator();
-        $this->assertSame($expectedValue, $nativeCalculator->pow($a, $b));
-    }
-
-    /**
-     * @return list<array{0:string, 1:int, 2:string}>
-     */
-    public function providerPow() : array
-    {
-        return [
-            ['123456789012345678901234567890', 0, '1'],
-
-            ['1', 2, '1'],
-            ['1234567891234567889999999', 1, '1234567891234567889999999'],
-
-            ['1234567891234567889999999', -2, '1'],
-            ['-1234567891234567889999999', 2, '1524157878067367851562259605883269630864220000001'],
-
-            ['1234567891234567889999999', 3, '1881676377434183981909558127466713752376807174114547646517403703669999999'],
-        ];
-    }
 }

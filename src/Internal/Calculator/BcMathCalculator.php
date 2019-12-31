@@ -40,43 +40,11 @@ class BcMathCalculator extends Calculator
     /**
      * {@inheritdoc}
      */
-    public function divQ(string $a, string $b) : string
-    {
-        return (string) \bcdiv($a, $b, 0);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function divR(string $a, string $b) : string
-    {
-        return (string) \bcmod($a, $b);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function divQR(string $a, string $b) : array
     {
         $q = (string) \bcdiv($a, $b, 0);
         $r = (string) \bcmod($a, $b);
 
         return [$q, $r];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pow(string $a, int $e) : string
-    {
-        return \bcpow($a, (string) $e, 0);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function sqrt(string $n) : string
-    {
-        return \bcsqrt($n, 0);
     }
 }

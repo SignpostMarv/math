@@ -153,22 +153,6 @@ class NativeCalculator extends Calculator
     /**
      * {@inheritdoc}
      */
-    public function divQ(string $a, string $b) : string
-    {
-        return $this->divQR($a, $b)[0];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function divR(string $a, string $b): string
-    {
-        return $this->divQR($a, $b)[1];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function divQR(string $a, string $b) : array
     {
         if ($a === '0') {
@@ -230,68 +214,6 @@ class NativeCalculator extends Calculator
         }
 
         return [$q, $r];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function pow(string $a, int $e) : string
-    {
-        if ($e === 0) {
-            return '1';
-        }
-
-        if ($e === 1) {
-            return $a;
-        }
-
-        $odd = $e % 2;
-        $e -= $odd;
-
-        $aa = $this->mul($a, $a);
-        $result = $this->pow($aa, (int) ($e / 2));
-
-        if ($odd === 1) {
-            $result = $this->mul($result, $a);
-        }
-
-        /**
-        * @var string
-        */
-        return $result;
-    }
-
-    /**
-     * Adapted from https://cp-algorithms.com/num_methods/roots_newton.html
-     *
-     * {@inheritDoc}
-     */
-    public function sqrt(string $n) : string
-    {
-        if ($n === '0') {
-            return '0';
-        }
-
-        // initial approximation
-        $x = \str_repeat('9', \intdiv(\strlen($n), 2) ?: 1);
-
-        $decreased = false;
-
-        for (;;) {
-            $nx = $this->divQ($this->add($x, $this->divQ($n, $x)), '2');
-
-            if ($x === $nx || $this->cmp($nx, $x) > 0 && $decreased) {
-                break;
-            }
-
-            $decreased = $this->cmp($nx, $x) < 0;
-            $x = $nx;
-        }
-
-        /**
-        * @var string
-        */
-        return $x;
     }
 
     /**
