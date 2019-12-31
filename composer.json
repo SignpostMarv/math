@@ -19,14 +19,29 @@
     "require-dev": {
         "ext-bcmath": "*",
         "ext-gmp": "*",
+        "maglnet/composer-require-checker": "^2.0",
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^8.5",
+        "povils/phpmnd": "^2.1",
         "psalm/plugin-phpunit": "dev-master",
+        "roave/security-advisories": "dev-master",
+        "sebastian/phpcpd": "^4.1",
+        "signpostmarv/php-cs-fixer-config": "^0.14.0",
+        "symfony/console": "^4.4",
         "vimeo/psalm": "^3.8"
     },
 	"conflict": {
 		"vimeo/psalm": "<3.8"
-	},
+    },
+    "scripts": {
+        "tests": [
+            "psalm --show-info=false",
+            "phpcpd src tests",
+            "phpmnd ./ --exclude=build --exclude=./vendor/ --non-zero-exit-on-violation --hint",
+			"php-cs-fixer fix --verbose --dry-run --diff-format=udiff",
+            "composer-require-checker check ./composer.json"
+        ]
+    },
     "autoload": {
         "psr-4": {
             "SignpostMarv\\Brick\\Math\\": "src/"
