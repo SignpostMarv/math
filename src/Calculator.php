@@ -29,6 +29,16 @@ abstract class Calculator
      */
     public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 
+    const BASE2 = 2;
+
+    const BASE36 = 36;
+
+    const ORD10 = 10;
+
+    const ORD32 = 32;
+
+    const ORD126 = 126;
+
     /**
      * Extracts the digits and sign of the operands.
      *
@@ -132,7 +142,7 @@ abstract class Calculator
      */
     public function toBase(string $number, int $base) : string
     {
-        if ($base < 2 || $base > 36) {
+        if ($base < self::BASE2 || $base > self::BASE36) {
             throw new InvalidArgumentException(
                 'Argument 2 must be between 2 and 36'
             );
@@ -248,7 +258,7 @@ abstract class Calculator
             );
         }
 
-        if (strlen($alphabet) < 2) {
+        if (strlen($alphabet) < self::BASE2) {
             throw new InvalidArgumentException(
                 'The alphabet must contain at least 2 chars.'
             );
@@ -261,10 +271,10 @@ abstract class Calculator
 
             $ord = ord($char);
 
-            if ($ord < 32 || $ord > 126) {
+            if ($ord < self::ORD32 || $ord > self::ORD126) {
                 $char = strtoupper(dechex($ord));
 
-                if ($ord < 10) {
+                if ($ord < self::ORD10) {
                     $char = '0' . $char;
                 }
             } else {

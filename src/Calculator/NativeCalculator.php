@@ -11,6 +11,11 @@ use SignpostMarv\Brick\Math\Calculator;
  */
 class NativeCalculator extends Calculator
 {
+    const MAX_DIGITS = [
+        4 => 9,
+        8 => 18,
+    ];
+
     /**
      * The max number of digits the platform can natively add, subtract, multiply or divide without overflow.
      * For multiplication, this represents the max sum of the lengths of both operands.
@@ -18,10 +23,8 @@ class NativeCalculator extends Calculator
      * For addition, it is assumed that an extra digit can hold a carry (1) without overflowing.
      * Example: 32-bit: max number 1,999,999,999 (9 digits + carry)
      *          64-bit: max number 1,999,999,999,999,999,999 (18 digits + carry)
-     *
-     * @var int
      */
-    private $maxDigits;
+    private int $maxDigits;
 
     /**
      * Class constructor.
@@ -30,18 +33,13 @@ class NativeCalculator extends Calculator
      */
     public function __construct()
     {
-        switch (PHP_INT_SIZE) {
-            case 4:
-                $this->maxDigits = 9;
-                break;
+        $maxDigits = self::MAX_DIGITS[PHP_INT_SIZE] ?? null;
 
-            case 8:
-                $this->maxDigits = 18;
-                break;
-
-            default:
-                throw new \RuntimeException('The platform is not 32-bit or 64-bit as expected.');
+        if ( ! is_int($maxDigits)) {
+            throw new \RuntimeException('The platform is not 32-bit or 64-bit as expected.');
         }
+
+        $this->maxDigits = $maxDigits;
     }
 
     /**

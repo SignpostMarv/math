@@ -54,7 +54,7 @@ class GmpCalculator extends Calculator
      */
     public function toBase(string $number, int $base) : string
     {
-        if ($base < 2 || $base > 36) {
+        if ($base < self::BASE2 || $base > self::BASE36) {
             throw new InvalidArgumentException(
                 'Argument 2 must be between 2 and 36'
             );
