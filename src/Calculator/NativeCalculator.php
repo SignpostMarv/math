@@ -91,19 +91,6 @@ class NativeCalculator extends Calculator
 	 */
 	public function mul(string $a, string $b) : string
 	{
-		[$a, $b] = static::TypeHintNumeric($a, $b);
-
-		/**
-		* @var int|float
-		*/
-		$result = $a * $b;
-
-		if (is_int($result)) {
-			return (string) $result;
-		}
-
-		[$a, $b] = static::TypeHintString($a, $b);
-
 		if ('0' === $a || '0' === $b) {
 			return '0';
 		}
@@ -123,6 +110,19 @@ class NativeCalculator extends Calculator
 		if ('-1' === $b) {
 			return $this->neg($a);
 		}
+
+		[$a, $b] = static::TypeHintNumeric($a, $b);
+
+		/**
+		* @var int|float
+		*/
+		$result = $a * $b;
+
+		if (is_int($result)) {
+			return (string) $result;
+		}
+
+		[$a, $b] = static::TypeHintString($a, $b);
 
 		[$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
