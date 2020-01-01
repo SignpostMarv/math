@@ -143,26 +143,10 @@ class NativeCalculator extends Calculator
 	 */
 	public function divQR(string $a, string $b) : array
 	{
-		if ('0' === $a) {
-			return ['0', '0'];
-		}
+		$maybe = $this->MaybeEarlyExitDivQR($a, $b);
 
-		if ($a === $b) {
-			return ['1', '0'];
-		}
-
-		if ('1' === $b) {
-			/**
-			* @var array{0:string, 1:string}
-			*/
-			return [$a, '0'];
-		}
-
-		if ('-1' === $b) {
-			/**
-			* @var array{0:string, 1:string}
-			*/
-			return [$this->neg($a), '0'];
+		if ( ! is_null($maybe)) {
+			return $maybe;
 		}
 
 		[$a, $b] = static::TypeHintNumeric($a, $b);
