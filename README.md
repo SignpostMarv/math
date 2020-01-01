@@ -1,8 +1,6 @@
 ## SignpostMarv\Brick Math Base Convert
 
-<img src="https://raw.githubusercontent.com/brick/brick/master/logo.png" alt="" align="left" height="64">
-
-A fork of [brick/math](https://github.com/brick/math), extracting & refactoring the integer base conversion portion.
+A fork of [brick/math](https://github.com/brick/math), extracting & refactoring the base conversion portion.
 
 [![Build Status](https://api.travis-ci.org/signpostmarv/brick-math-base-convert.svg?branch=master)](http://travis-ci.org/signpostmarv/brick-math-base-convert)
 [![Coverage Status](https://coveralls.io/repos/signpostmarv/brick-math-base-convert/badge.svg?branch=master)](https://coveralls.io/r/signpostmarv/brick-math-base-convert?branch=master)
@@ -23,9 +21,7 @@ This library requires PHP 7.4 or later.
 
 For older version, please use the [original package](https://github.com/brick/math).
 
-Although the library can work seamlessly on any PHP installation, it is highly recommended that you install the
-[GMP](http://php.net/manual/en/book.gmp.php) or [BCMath](http://php.net/manual/en/book.bc.php) extension
-to speed up calculations. The fastest available calculator implementation will be automatically selected at runtime.
+Although the library can work seamlessly on any PHP installation, implementations for [ext-bcmath](https://github.com/signpostmarv/brick-math-base-convert-bcmath) and [ext-gmp](https://github.com/signpostmarv/brick-math-base-convert-gmp) are available.
 
 ### Project status & release process
 
