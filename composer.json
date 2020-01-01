@@ -16,7 +16,6 @@
         "php": "^7.4"
     },
     "require-dev": {
-        "ext-bcmath": "*",
         "maglnet/composer-require-checker": "^2.0",
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^8.5",
