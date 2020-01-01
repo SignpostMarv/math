@@ -400,5 +400,19 @@ abstract class AbstractCalculatorTest extends TestCase
 		static::assertSame('1', $this->ObtainCalculator()->neg('-1'));
 	}
 
+	public function testDivQR() : void
+	{
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '-1'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '-2'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '-3'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '0'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '1'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '2'));
+		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '3'));
+		static::assertSame(['1', '0'], $this->ObtainCalculator()->divQR('1', '1'));
+		static::assertSame(['2', '0'], $this->ObtainCalculator()->divQR('2', '1'));
+		static::assertSame(['-1', '0'], $this->ObtainCalculator()->divQR('1', '-1'));
+	}
+
 	abstract protected function ObtainCalculator() : Calculator;
 }
