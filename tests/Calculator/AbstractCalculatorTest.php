@@ -6,14 +6,14 @@ namespace SignpostMarv\Brick\Math\Tests\Calculator;
 
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use SignpostMarv\Brick\Math\Calculator;
 use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
-use SignpostMarv\Brick\Math\Tests\AbstractTestCase;
 
 /**
  * Unit tests for class NativeCalculator.
  */
-abstract class AbstractCalculatorTest extends AbstractTestCase
+abstract class AbstractCalculatorTest extends TestCase
 {
 	/**
 	 * @dataProvider providerAdd
