@@ -3,7 +3,7 @@
 A fork of [brick/math](https://github.com/brick/math), extracting & refactoring the base conversion portion.
 
 [![Build Status](https://api.travis-ci.org/signpostmarv/brick-math-base-convert.svg?branch=master)](http://travis-ci.org/signpostmarv/brick-math-base-convert)
-[![Coverage Status](https://coveralls.io/repos/signpostmarv/brick-math-base-convert/badge.svg?branch=master)](https://coveralls.io/r/signpostmarv/brick-math-base-convert?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/SignpostMarv/brick-math-base-convert/badge.svg?branch=master)](https://coveralls.io/github/SignpostMarv/brick-math-base-convert?branch=master)
 [![Total Downloads](https://poser.pugx.org/signpostmarv/brick-math-base-convert/downloads)](https://packagist.org/packages/signpostmarv/brick-math-base-convert)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
 
