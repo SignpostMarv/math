@@ -390,5 +390,12 @@ abstract class AbstractCalculatorTest extends TestCase
 		$this->ObtainCalculator()->toArbitraryBase('-123', '01', 2);
 	}
 
+	public function testNeg() : void
+	{
+		static::assertSame('-1', $this->ObtainCalculator()->neg('1'));
+		static::assertSame('0', $this->ObtainCalculator()->neg('0'));
+		static::assertSame('1', $this->ObtainCalculator()->neg('-1'));
+	}
+
 	abstract protected function ObtainCalculator() : Calculator;
 }
