@@ -5,7 +5,6 @@
     "keywords": [
         "Brick",
         "Math",
-        "BigInteger",
         "Arbitrary Base Conversion"
     ],
     "license": "MIT",
