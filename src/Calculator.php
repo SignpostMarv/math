@@ -51,7 +51,7 @@ abstract class Calculator
 		}
 
 		if ('-' === $n[0]) {
-			return \mb_substr($n, 1);
+			return \substr($n, 1);
 		}
 
 		return '-' . $n;
@@ -100,7 +100,7 @@ abstract class Calculator
 	 */
 	public function fromBase(string $number, int $base) : string
 	{
-		return $this->fromArbitraryBase(\mb_strtolower($number), self::ALPHABET, $base);
+		return $this->fromArbitraryBase(\strtolower($number), self::ALPHABET, $base);
 	}
 
 	/**
@@ -125,7 +125,7 @@ abstract class Calculator
 		$negative = ('-' === $number[0]);
 
 		if ($negative) {
-			$number = \mb_substr($number, 1);
+			$number = \substr($number, 1);
 		}
 
 		$number = $this->toArbitraryBase($number, self::ALPHABET, $base);
@@ -168,8 +168,8 @@ abstract class Calculator
 
 		$base = (string) $base;
 
-		for ($i = \mb_strlen($number) - 1; $i >= 0; --$i) {
-			$index = \mb_strpos($alphabet, $number[$i]);
+		for ($i = \strlen($number) - 1; $i >= 0; --$i) {
+			$index = \strpos($alphabet, $number[$i]);
 
 			if (0 !== $index) {
 				$result = $this->add($result, (1 === $index)
@@ -237,8 +237,8 @@ abstract class Calculator
 		$aNeg = ('-' === $a[0]);
 		$bNeg = ('-' === $b[0]);
 
-		$aDig = $aNeg ? \mb_substr($a, 1) : $a;
-		$bDig = $bNeg ? \mb_substr($b, 1) : $b;
+		$aDig = $aNeg ? \substr($a, 1) : $a;
+		$bDig = $bNeg ? \substr($b, 1) : $b;
 
 		return [
 			$aDig,
@@ -256,7 +256,7 @@ abstract class Calculator
 			);
 		}
 
-		if (mb_strlen($alphabet) < self::BASE2) {
+		if (strlen($alphabet) < self::BASE2) {
 			throw new InvalidArgumentException(
 				'The alphabet must contain at least 2 chars.'
 			);
@@ -270,7 +270,7 @@ abstract class Calculator
 			$ord = ord($char);
 
 			if ($ord < self::ORD32 || $ord > self::ORD126) {
-				$char = mb_strtoupper(dechex($ord));
+				$char = strtoupper(dechex($ord));
 
 				if ($ord < self::ORD10) {
 					$char = '0' . $char;

@@ -207,7 +207,7 @@ abstract class AbstractCalculatorTest extends AbstractTestCase
 		if (Calculator::ALPHABET === $alphabet) {
 			$number = $this->ObtainCalculator()->fromBase($baseN, 36);
 		} else {
-			$number = $this->ObtainCalculator()->fromArbitraryBase($baseN, $alphabet, \mb_strlen($alphabet));
+			$number = $this->ObtainCalculator()->fromArbitraryBase($baseN, $alphabet, \strlen($alphabet));
 		}
 
 		$this->assertSame($base10, $number);
@@ -234,7 +234,7 @@ abstract class AbstractCalculatorTest extends AbstractTestCase
 	 */
 	public function testToArbitraryBase($base10, string $alphabet, string $baseN) : void
 	{
-		$actual = $this->ObtainCalculator()->toArbitraryBase($base10, $alphabet, \mb_strlen($alphabet));
+		$actual = $this->ObtainCalculator()->toArbitraryBase($base10, $alphabet, \strlen($alphabet));
 
 		$this->assertSame($baseN, $actual);
 	}

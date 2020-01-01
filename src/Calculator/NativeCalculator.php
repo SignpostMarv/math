@@ -267,18 +267,18 @@ class NativeCalculator extends Calculator
 			/**
 			* @var numeric
 			*/
-			$blockA = \mb_substr($a, $i, $blockLength);
+			$blockA = \substr($a, $i, $blockLength);
 
 			/**
 			* @var numeric
 			*/
-			$blockB = \mb_substr($b, $i, $blockLength);
+			$blockB = \substr($b, $i, $blockLength);
 
 			$sum = (string) ($blockA + $blockB + $carry);
-			$sumLength = \mb_strlen($sum);
+			$sumLength = \strlen($sum);
 
 			if ($sumLength > $blockLength) {
-				$sum = \mb_substr($sum, 1);
+				$sum = \substr($sum, 1);
 				$carry = 1;
 			} else {
 				if ($sumLength < $blockLength) {
@@ -343,12 +343,12 @@ class NativeCalculator extends Calculator
 			/**
 			* @var numeric
 			*/
-			$blockA = \mb_substr($a, $i, $blockLength);
+			$blockA = \substr($a, $i, $blockLength);
 
 			/**
 			* @var numeric
 			*/
-			$blockB = \mb_substr($b, $i, $blockLength);
+			$blockB = \substr($b, $i, $blockLength);
 
 			$sum = $blockA - $blockB - $carry;
 
@@ -360,7 +360,7 @@ class NativeCalculator extends Calculator
 			}
 
 			$sum = (string) $sum;
-			$sumLength = \mb_strlen($sum);
+			$sumLength = \strlen($sum);
 
 			if ($sumLength < $blockLength) {
 				$sum = \str_repeat('0', $blockLength - $sumLength) . $sum;
@@ -396,8 +396,8 @@ class NativeCalculator extends Calculator
 	 */
 	private function doMul(string $a, string $b) : string
 	{
-		$x = \mb_strlen($a);
-		$y = \mb_strlen($b);
+		$x = \strlen($a);
+		$y = \strlen($b);
 
 		$maxDigits = \intdiv($this->maxDigits, 2);
 		$complement = 10 ** $maxDigits;
@@ -413,7 +413,7 @@ class NativeCalculator extends Calculator
 				$i = 0;
 			}
 
-			$blockA = (int) \mb_substr($a, $i, $blockALength);
+			$blockA = (int) \substr($a, $i, $blockALength);
 
 			$line = '';
 			$carry = 0;
@@ -427,7 +427,7 @@ class NativeCalculator extends Calculator
 					$j = 0;
 				}
 
-				$blockB = (int) \mb_substr($b, $j, $blockBLength);
+				$blockB = (int) \substr($b, $j, $blockBLength);
 
 				$mul = $blockA * $blockB + $carry;
 				$value = $mul % $complement;
@@ -481,8 +481,8 @@ class NativeCalculator extends Calculator
 			return ['0', $a];
 		}
 
-		$x = \mb_strlen($a);
-		$y = \mb_strlen($b);
+		$x = \strlen($a);
+		$y = \strlen($b);
 
 		// we now know that a >= b && x >= y
 
@@ -491,7 +491,7 @@ class NativeCalculator extends Calculator
 		$z = $y; // focus length, always $y or $y+1
 
 		for (;;) {
-			$focus = \mb_substr((string) $a, 0, $z);
+			$focus = \substr((string) $a, 0, $z);
 
 			$cmp = $this->doCmp($focus, $b);
 
@@ -517,7 +517,7 @@ class NativeCalculator extends Calculator
 				break;
 			}
 
-			$x = \mb_strlen((string) $a);
+			$x = \strlen((string) $a);
 
 			if ($x < $y) { // remainder < dividend
 				break;
@@ -539,8 +539,8 @@ class NativeCalculator extends Calculator
 	 */
 	private function doCmp(string $a, string $b) : int
 	{
-		$x = \mb_strlen($a);
-		$y = \mb_strlen($b);
+		$x = \strlen($a);
+		$y = \strlen($b);
 
 		$cmp = $x <=> $y;
 
@@ -563,8 +563,8 @@ class NativeCalculator extends Calculator
 	 */
 	private function pad(string &$a, string &$b) : int
 	{
-		$x = \mb_strlen($a);
-		$y = \mb_strlen($b);
+		$x = \strlen($a);
+		$y = \strlen($b);
 
 		if ($x > $y) {
 			$b = \str_repeat('0', $x - $y) . $b;
