@@ -413,6 +413,8 @@ abstract class AbstractCalculatorTest extends TestCase
 		static::assertSame(['2', '0'], $this->ObtainCalculator()->divQR('2', '1'));
 		static::assertSame(['-1', '0'], $this->ObtainCalculator()->divQR('1', '-1'));
 		static::assertSame(['-2', '.1'], $this->ObtainCalculator()->divQR('4.3', '-2.1'));
+		static::assertSame(['2', '-.1'], $this->ObtainCalculator()->divQR('-4.3', '-2.1'));
+		static::assertSame(['-2', '-.1'], $this->ObtainCalculator()->divQR('-4.3', '2.1'));
 	}
 
 	abstract protected function ObtainCalculator() : Calculator;
