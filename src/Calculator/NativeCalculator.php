@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SignpostMarv\Brick\Math\Calculator;
 
+use RuntimeException;
 use SignpostMarv\Brick\Math\Calculator;
 
 /**
@@ -30,13 +31,15 @@ class NativeCalculator extends Calculator
 	 * Class constructor.
 	 *
 	 * @codeCoverageIgnore
+	 *
+	 * @throws RuntimeException if the platform is unsupported
 	 */
 	public function __construct()
 	{
 		$maxDigits = self::MAX_DIGITS[PHP_INT_SIZE] ?? null;
 
 		if ( ! is_int($maxDigits)) {
-			throw new \RuntimeException('The platform is not 32-bit or 64-bit as expected.');
+			throw new RuntimeException('The platform is not 32-bit or 64-bit as expected.');
 		}
 
 		$this->maxDigits = $maxDigits;
@@ -415,7 +418,7 @@ class NativeCalculator extends Calculator
 
 				$mul = $blockA * $blockB + $carry;
 				$value = $mul % $complement;
-				$carry = ($mul - $value) / $complement;
+				$carry = (int) (($mul - $value) / $complement);
 
 				$value = (string) $value;
 				$value = \str_pad($value, $maxDigits, '0', STR_PAD_LEFT);
@@ -428,7 +431,7 @@ class NativeCalculator extends Calculator
 			}
 
 			if (0 !== $carry) {
-				$line = $carry . $line;
+				$line = (string) $carry . (string) $line;
 			}
 
 			$line = \ltrim($line, '0');

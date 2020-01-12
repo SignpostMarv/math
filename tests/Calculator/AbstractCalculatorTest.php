@@ -6,7 +6,9 @@ namespace SignpostMarv\Brick\Math\Tests\Calculator;
 
 use Generator;
 use InvalidArgumentException;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext;
 use SignpostMarv\Brick\Math\Calculator;
 use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
 
@@ -17,6 +19,9 @@ abstract class AbstractCalculatorTest extends TestCase
 {
 	/**
 	 * @dataProvider providerAdd
+	 *
+	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testAdd(string $a, string $b, string $expectedValue) : void
 	{
@@ -42,6 +47,9 @@ abstract class AbstractCalculatorTest extends TestCase
 
 	/**
 	 * @dataProvider providerMul
+	 *
+	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testMul(string $a, string $b, string $expectedValue) : void
 	{
@@ -76,6 +84,10 @@ abstract class AbstractCalculatorTest extends TestCase
 	 * @param int|float|string $number   the number to convert, in base 10
 	 * @param int              $base     the base to convert the number to
 	 * @param string           $expected the expected result
+	 *
+	 * @throws InvalidArgumentException                  if $number is not supported by static::ObtainCalculator()->toBase()
+	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testToBase($number, int $base, string $expected) : void
 	{
@@ -178,6 +190,8 @@ abstract class AbstractCalculatorTest extends TestCase
 
 	/**
 	 * @dataProvider providerToInvalidBaseThrowsException
+	 *
+	 * @throws InvalidArgumentException if it behaves as expected
 	 */
 	public function testToInvalidBaseThrowsException(int $base) : void
 	{
@@ -204,6 +218,10 @@ abstract class AbstractCalculatorTest extends TestCase
 	 * @dataProvider providerFromArbitraryBase
 	 *
 	 * @param string $base10
+	 *
+	 * @throws InvalidArgumentException                  if $baseN is not supported by static::ObtainCalculator()->fromBase()
+	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testFromArbitraryBase($base10, string $alphabet, string $baseN) : void
 	{
@@ -234,6 +252,10 @@ abstract class AbstractCalculatorTest extends TestCase
 	 * @dataProvider providerArbitraryBase
 	 *
 	 * @param string $base10
+	 *
+	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
+	 * @throws InvalidArgumentException                  if it behaves as expected
 	 */
 	public function testToArbitraryBase($base10, string $alphabet, string $baseN) : void
 	{
@@ -324,6 +346,8 @@ abstract class AbstractCalculatorTest extends TestCase
 
 	/**
 	 * @dataProvider providerArbitraryBaseWithInvalidAlphabet
+	 *
+	 * @throws InvalidArgumentException if it behaves as expected
 	 */
 	public function testFromArbitraryBaseWithInvalidAlphabet(string $alphabet) : void
 	{
@@ -335,6 +359,8 @@ abstract class AbstractCalculatorTest extends TestCase
 
 	/**
 	 * @dataProvider providerFromArbitraryBaseWithInvalidNumber
+	 *
+	 * @throws InvalidArgumentException if it behaves as expected
 	 */
 	public function testFromArbitraryBaseWithInvalidNumber(string $number, string $alphabet, string $expectedMessage) : void
 	{
@@ -365,6 +391,8 @@ abstract class AbstractCalculatorTest extends TestCase
 
 	/**
 	 * @dataProvider providerArbitraryBaseWithInvalidAlphabet
+	 *
+	 * @throws InvalidArgumentException if it behaves as expected
 	 */
 	public function testToArbitraryBaseWithInvalidAlphabet(string $alphabet) : void
 	{
@@ -385,6 +413,9 @@ abstract class AbstractCalculatorTest extends TestCase
 		];
 	}
 
+	/**
+	* @throws InvalidArgumentException if it behaves as expected
+	*/
 	public function testToArbitraryBaseOnNegativeNumber() : void
 	{
 		$this->expectException(InvalidArgumentException::class);
@@ -393,6 +424,10 @@ abstract class AbstractCalculatorTest extends TestCase
 		$this->ObtainCalculator()->toArbitraryBase('-123', '01', 2);
 	}
 
+	/**
+	* @throws ExpectationFailedException if assertions fail
+	* @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
+	*/
 	public function testNeg() : void
 	{
 		static::assertSame('-1', $this->ObtainCalculator()->neg('1'));
@@ -400,6 +435,10 @@ abstract class AbstractCalculatorTest extends TestCase
 		static::assertSame('1', $this->ObtainCalculator()->neg('-1'));
 	}
 
+	/**
+	* @throws ExpectationFailedException if assertions fail
+	* @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
+	*/
 	public function testDivQR() : void
 	{
 		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '-1'));

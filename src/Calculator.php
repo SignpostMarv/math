@@ -96,6 +96,8 @@ abstract class Calculator
 	 * @param string $number the number, positive or zero, non-empty, case-insensitively validated for the given base
 	 * @param int    $base   the base of the number, validated from 2 to 36
 	 *
+	 * @throws InvalidArgumentException if $number is invalid
+	 *
 	 * @return string the converted number, following the Calculator conventions
 	 */
 	public function fromBase(string $number, int $base) : string
@@ -111,6 +113,8 @@ abstract class Calculator
 	 *
 	 * @param string $number the number to convert, following the Calculator conventions
 	 * @param int    $base   the base to convert to, validated from 2 to 36
+	 *
+	 * @throws InvalidArgumentException if $base is unsupported
 	 *
 	 * @return string the converted number, lowercase
 	 */
@@ -144,6 +148,8 @@ abstract class Calculator
 	 *                         containing only chars in the given alphabet/base
 	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
 	 * @param int    $base     the base of the number, validated from 2 to alphabet length
+	 *
+	 * @throws InvalidArgumentException if $number or $alphabet are invalid
 	 *
 	 * @return string the number in base 10, following the Calculator conventions
 	 */
@@ -192,6 +198,8 @@ abstract class Calculator
 	 * @param string $number   the number to convert, positive or zero, following the Calculator conventions
 	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
 	 * @param int    $base     the base to convert to, validated from 2 to alphabet length
+	 *
+	 * @throws InvalidArgumentException if $number represents a negative number
 	 *
 	 * @return string the converted number in the given alphabet
 	 */
@@ -248,6 +256,11 @@ abstract class Calculator
 		];
 	}
 
+	/**
+	* @throws InvalidArgumentException if $number is an empty string
+	* @throws InvalidArgumentException if $alphabet does not contain sufficient characters
+	* @throws InvalidArgumentException if $number cannot exist in $alphabet
+	*/
 	protected function ValidateAlphabet(string $number, string $alphabet) : void
 	{
 		if ('' === $number) {
