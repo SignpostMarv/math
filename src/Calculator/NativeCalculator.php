@@ -17,6 +17,8 @@ class NativeCalculator extends Calculator
 		8 => 18,
 	];
 
+	const COMPARE_LESS_THAN = -1;
+
 	/**
 	 * The max number of digits the platform can natively add, subtract, multiply or divide without overflow.
 	 * For multiplication, this represents the max sum of the lengths of both operands.
@@ -303,7 +305,7 @@ class NativeCalculator extends Calculator
 		// Ensure that we always subtract to a positive result: biggest minus smallest.
 		$cmp = $this->doCmp($a, $b);
 
-		$invert = (-1 === $cmp);
+		$invert = (self::COMPARE_LESS_THAN === $cmp);
 
 		if ($invert) {
 			$c = $a;
@@ -464,7 +466,7 @@ class NativeCalculator extends Calculator
 	{
 		$cmp = $this->doCmp($a, $b);
 
-		if (-1 === $cmp) {
+		if (self::COMPARE_LESS_THAN === $cmp) {
 			return ['0', $a];
 		}
 
@@ -482,7 +484,7 @@ class NativeCalculator extends Calculator
 
 			$cmp = $this->doCmp($focus, $b);
 
-			if (-1 === $cmp) {
+			if (self::COMPARE_LESS_THAN === $cmp) {
 				if ($z === $x) { // remainder < dividend
 					break;
 				}
