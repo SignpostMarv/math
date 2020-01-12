@@ -20,7 +20,7 @@
         "php-coveralls/php-coveralls": "^2.2",
         "phpunit/phpunit": "^8.5",
         "povils/phpmnd": "^2.1",
-        "psalm/plugin-phpunit": "dev-master",
+        "psalm/plugin-phpunit": "^0.8.1",
         "roave/security-advisories": "dev-master",
         "sebastian/phpcpd": "^4.1",
         "signpostmarv/php-cs-fixer-config": "^0.14.0",
