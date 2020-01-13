@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\RecursionContext;
 use SignpostMarv\Brick\Math\Calculator;
 use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
+use function strlen;
 
 /**
  * Unit tests for class NativeCalculator.
@@ -20,13 +21,13 @@ abstract class AbstractCalculatorTest extends TestCase
 	/**
 	 * @dataProvider providerAdd
 	 *
-	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws ExpectationFailedException if assertions fail
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testAdd(string $a, string $b, string $expectedValue) : void
 	{
 		$nativeCalculator = $this->ObtainCalculator();
-		$this->assertSame($expectedValue, $nativeCalculator->add($a, $b));
+		static::assertSame($expectedValue, $nativeCalculator->add($a, $b));
 	}
 
 	/**
@@ -48,13 +49,13 @@ abstract class AbstractCalculatorTest extends TestCase
 	/**
 	 * @dataProvider providerMul
 	 *
-	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws ExpectationFailedException if assertions fail
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testMul(string $a, string $b, string $expectedValue) : void
 	{
 		$nativeCalculator = $this->ObtainCalculator();
-		$this->assertSame($expectedValue, $nativeCalculator->mul($a, $b));
+		static::assertSame($expectedValue, $nativeCalculator->mul($a, $b));
 	}
 
 	/**
@@ -81,17 +82,17 @@ abstract class AbstractCalculatorTest extends TestCase
 	/**
 	 * @dataProvider providerToBase
 	 *
-	 * @param int|float|string $number   the number to convert, in base 10
-	 * @param int              $base     the base to convert the number to
-	 * @param string           $expected the expected result
+	 * @param int|float|string $number the number to convert, in base 10
+	 * @param int $base the base to convert the number to
+	 * @param string $expected the expected result
 	 *
-	 * @throws InvalidArgumentException                  if $number is not supported by static::ObtainCalculator()->toBase()
-	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws InvalidArgumentException if $number is not supported by static::ObtainCalculator()->toBase()
+	 * @throws ExpectationFailedException if assertions fail
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testToBase($number, int $base, string $expected) : void
 	{
-		$this->assertSame($expected, $this->ObtainCalculator()->toBase((string) $number, $base));
+		static::assertSame($expected, $this->ObtainCalculator()->toBase((string) $number, $base));
 	}
 
 	/**
@@ -219,8 +220,8 @@ abstract class AbstractCalculatorTest extends TestCase
 	 *
 	 * @param string $base10
 	 *
-	 * @throws InvalidArgumentException                  if $baseN is not supported by static::ObtainCalculator()->fromBase()
-	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws InvalidArgumentException if $baseN is not supported by static::ObtainCalculator()->fromBase()
+	 * @throws ExpectationFailedException if assertions fail
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testFromArbitraryBase($base10, string $alphabet, string $baseN) : void
@@ -228,10 +229,10 @@ abstract class AbstractCalculatorTest extends TestCase
 		if (Calculator::ALPHABET === $alphabet) {
 			$number = $this->ObtainCalculator()->fromBase($baseN, 36);
 		} else {
-			$number = $this->ObtainCalculator()->fromArbitraryBase($baseN, $alphabet, \strlen($alphabet));
+			$number = $this->ObtainCalculator()->fromArbitraryBase($baseN, $alphabet, strlen($alphabet));
 		}
 
-		$this->assertSame($base10, $number);
+		static::assertSame($base10, $number);
 	}
 
 	/**
@@ -253,15 +254,15 @@ abstract class AbstractCalculatorTest extends TestCase
 	 *
 	 * @param string $base10
 	 *
-	 * @throws ExpectationFailedException                if assertions fail
+	 * @throws ExpectationFailedException if assertions fail
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
-	 * @throws InvalidArgumentException                  if it behaves as expected
+	 * @throws InvalidArgumentException if it behaves as expected
 	 */
 	public function testToArbitraryBase($base10, string $alphabet, string $baseN) : void
 	{
-		$actual = $this->ObtainCalculator()->toArbitraryBase($base10, $alphabet, \strlen($alphabet));
+		$actual = $this->ObtainCalculator()->toArbitraryBase($base10, $alphabet, strlen($alphabet));
 
-		$this->assertSame($baseN, $actual);
+		static::assertSame($baseN, $actual);
 	}
 
 	/**

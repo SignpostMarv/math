@@ -9,6 +9,11 @@ use InvalidArgumentException;
 use function ltrim;
 use function ord;
 use function preg_match;
+use function preg_quote;
+use function strpos;
+use function strrev;
+use function strtolower;
+use function substr;
 use function trim;
 
 /**
@@ -51,7 +56,7 @@ abstract class Calculator
 		}
 
 		if ('-' === $n[0]) {
-			return \substr($n, 1);
+			return substr($n, 1);
 		}
 
 		return '-' . $n;
@@ -94,7 +99,7 @@ abstract class Calculator
 	 * has built-in support for base conversion.
 	 *
 	 * @param string $number the number, positive or zero, non-empty, case-insensitively validated for the given base
-	 * @param int    $base   the base of the number, validated from 2 to 36
+	 * @param int $base the base of the number, validated from 2 to 36
 	 *
 	 * @throws InvalidArgumentException if $number is invalid
 	 *
@@ -102,7 +107,7 @@ abstract class Calculator
 	 */
 	public function fromBase(string $number, int $base) : string
 	{
-		return $this->fromArbitraryBase(\strtolower($number), self::ALPHABET, $base);
+		return $this->fromArbitraryBase(strtolower($number), self::ALPHABET, $base);
 	}
 
 	/**
@@ -112,7 +117,7 @@ abstract class Calculator
 	 * has built-in support for base conversion.
 	 *
 	 * @param string $number the number to convert, following the Calculator conventions
-	 * @param int    $base   the base to convert to, validated from 2 to 36
+	 * @param int $base the base to convert to, validated from 2 to 36
 	 *
 	 * @throws InvalidArgumentException if $base is unsupported
 	 *
@@ -129,7 +134,7 @@ abstract class Calculator
 		$negative = ('-' === $number[0]);
 
 		if ($negative) {
-			$number = \substr($number, 1);
+			$number = substr($number, 1);
 		}
 
 		$number = $this->toArbitraryBase($number, self::ALPHABET, $base);
@@ -144,10 +149,10 @@ abstract class Calculator
 	/**
 	 * Converts a non-negative number in an arbitrary base using a custom alphabet, to base 10.
 	 *
-	 * @param string $number   the number to convert, validated as a non-empty string,
-	 *                         containing only chars in the given alphabet/base
+	 * @param string $number the number to convert, validated as a non-empty string,
+	 *                       containing only chars in the given alphabet/base
 	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
-	 * @param int    $base     the base of the number, validated from 2 to alphabet length
+	 * @param int $base the base of the number, validated from 2 to alphabet length
 	 *
 	 * @throws InvalidArgumentException if $number or $alphabet are invalid
 	 *
@@ -175,7 +180,7 @@ abstract class Calculator
 		$base = (string) $base;
 
 		for ($i = \strlen($number) - 1; $i >= 0; --$i) {
-			$index = \strpos($alphabet, $number[$i]);
+			$index = strpos($alphabet, $number[$i]);
 
 			if (0 !== $index) {
 				$result = $this->add($result, (1 === $index)
@@ -195,9 +200,9 @@ abstract class Calculator
 	/**
 	 * Converts a non-negative number to an arbitrary base using a custom alphabet.
 	 *
-	 * @param string $number   the number to convert, positive or zero, following the Calculator conventions
+	 * @param string $number the number to convert, positive or zero, following the Calculator conventions
 	 * @param string $alphabet the alphabet that contains every digit, validated as 2 chars minimum
-	 * @param int    $base     the base to convert to, validated from 2 to alphabet length
+	 * @param int $base the base to convert to, validated from 2 to alphabet length
 	 *
 	 * @throws InvalidArgumentException if $number represents a negative number
 	 *
@@ -229,7 +234,7 @@ abstract class Calculator
 			$result .= $alphabet[$remainder];
 		}
 
-		return \strrev($result);
+		return strrev($result);
 	}
 
 	/**
@@ -245,8 +250,8 @@ abstract class Calculator
 		$aNeg = ('-' === $a[0]);
 		$bNeg = ('-' === $b[0]);
 
-		$aDig = $aNeg ? \substr($a, 1) : $a;
-		$bDig = $bNeg ? \substr($b, 1) : $b;
+		$aDig = $aNeg ? substr($a, 1) : $a;
+		$bDig = $bNeg ? substr($b, 1) : $b;
 
 		return [
 			$aDig,
@@ -275,7 +280,7 @@ abstract class Calculator
 			);
 		}
 
-		$pattern = '/[^' . \preg_quote($alphabet, '/') . ']/';
+		$pattern = '/[^' . preg_quote($alphabet, '/') . ']/';
 
 		if (1 === preg_match($pattern, $number, $matches)) {
 			$char = $matches[0];
