@@ -13,6 +13,9 @@ class Cs extends ConfigUsedWithStaticAnalysis
 		$rules = parent::RuntimeResolveRules();
 
 		$rules['mb_str_functions'] = false;
+		$rules['php_unit_method_casing'] = [
+			'case' => 'camel_case',
+		];
 
 		return $rules;
 	}
