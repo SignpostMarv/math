@@ -10,6 +10,7 @@ namespace SignpostMarv\Brick\Math\Tests;
 
 return Cs::createWithPaths(...[
 	__FILE__,
+	__DIR__ . '/phpunit.xdebug-filter.php',
 	__DIR__ . '/src/',
 	__DIR__ . '/tests/',
 ]);
