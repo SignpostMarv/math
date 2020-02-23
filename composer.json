@@ -23,7 +23,7 @@
         "psalm/plugin-phpunit": "^0.9.0",
         "roave/security-advisories": "dev-master",
         "sebastian/phpcpd": "^4.1",
-        "signpostmarv/php-cs-fixer-config": "^0.16.2",
+        "signpostmarv/php-cs-fixer-config": "^0.17.1",
         "vimeo/psalm": "^3.9"
     },
 	"conflict": {
