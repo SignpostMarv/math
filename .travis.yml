@@ -3,6 +3,16 @@ language: php
 php:
   - 7.4
 
+matrix:
+  include:
+    - php: 7.4
+      env:
+        - xdebug=yes
+    - php: 7.4
+      env:
+        - psalm=yes
+  fast_finish: true
+
 cache:
   files:
     - ./.php_cs.cache
@@ -11,11 +21,15 @@ cache:
     - ./psalm/cache
 
 before_script:
-  - composer install
+  - if [[ "$xdebug" != "yes" || "$psalm" = "yes" ]]; then phpenv config-rm xdebug.ini; fi
+
+install:
+  - travis_retry composer install --no-interaction --no-suggest --prefer-dist
 
 script:
-  - vendor/bin/psalm --show-info=false --diff --diff-methods
-  - vendor/bin/phpunit --coverage-clover ./phpunit.clover
+  - if [[ "$psalm" != "yes" && "$xdebug" != "yes" ]]; then composer run static-analysis; fi
+  - if [[ "$psalm" = "yes" ]]; then vendor/bin/psalm --show-info=false --diff --diff-methods; fi
+  - if [[ "$xdebug" = "yes" ]]; then vendor/bin/phpunit --coverage-clover ./phpunit.clover; fi
 
 after_script:
-  - vendor/bin/php-coveralls -v
+  - if [[ "$xdebug" = "yes" ]]; vendor/bin/php-coveralls -v; fi
