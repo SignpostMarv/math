@@ -31,12 +31,15 @@
     },
     "scripts": {
         "tests": [
+            "phpunit -vvvv",
             "psalm --show-info=false",
+            "@static-analysis"
+        ],
+        "static-analysis": [
             "phpcpd src tests",
             "phpmnd ./ --exclude=build --exclude=./vendor/ --non-zero-exit-on-violation --hint",
 			"php-cs-fixer fix --verbose --dry-run --diff-format=udiff",
-            "composer-require-checker check ./composer.json",
-            "phpunit -vvvv"
+            "composer-require-checker check ./composer.json"
         ]
     },
     "autoload": {
