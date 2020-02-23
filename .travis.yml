@@ -3,6 +3,10 @@ language: php
 php:
   - 7.4
 
+cache:
+  files:
+    - ./.php_cs.cache
+
 before_script:
   - composer install
 
