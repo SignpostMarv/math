@@ -18,6 +18,7 @@ matrix:
 cache:
   files:
     - ./.php_cs.cache
+    - /.phpunit.result.cache
   directories:
     - $HOME/.composer/cache
     - ./psalm/cache
