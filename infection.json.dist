@@ -1,0 +1,115 @@
+{
+    "timeout": 180,
+    "source": {
+        "directories": [
+            "./src/"
+        ]
+    },
+    "logs": {
+        "text": "infection.log"
+    },
+    "mutators": {
+        "@default": true,
+        "ArrayItemRemoval": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv"
+            ]
+        },
+        "Assignment": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doAdd",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doSub"
+            ]
+        },
+        "Break_": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv"
+            ]
+        },
+        "CastInt": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::toArbitraryBase",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul"
+            ]
+        },
+        "CastString": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::divQR",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul"
+            ]
+        },
+        "GreaterThan": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::ValidateAlphabet",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::pad"
+            ]
+        },
+        "Identical": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::MaybeEarlyExitDivQR",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv"
+            ]
+        },
+        "Increment": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv"
+            ]
+        },
+        "LessThan": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::ValidateAlphabet",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doAdd",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doSub",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::pad"
+            ]
+        },
+        "LessThanNegotiation": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::MaybeEarlyExitDivQR",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doSub"
+            ]
+        },
+        "LogicalOr": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::mul"
+            ]
+        },
+        "Minus": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doAdd",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doSub",
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::pad"
+            ]
+        },
+        "MinusEqual": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doMul"
+            ]
+        },
+        "Plus": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::add"
+            ]
+        },
+        "UnwrapStrRepeat": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator\\NativeCalculator::doDiv"
+            ]
+        },
+        "UnwrapStrToLower": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::fromBase"
+            ]
+        },
+        "UnwrapTrim": {
+            "ignore": [
+                "SignpostMarv\\Brick\\Math\\Calculator::toArbitraryBase"
+            ]
+        }
+    }
+}

@@ -3,3 +3,5 @@
 /.phpunit.result.cache
 /.php_cs.cache
 /psalm/cache/
+/coverage/
+/infection.log

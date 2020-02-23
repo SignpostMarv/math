@@ -26,6 +26,18 @@ class NativeCalculator extends Calculator
 
 	const COMPARE_LESS_THAN = -1;
 
+	const SUBSTR_FROM_START = 0;
+
+	const BREAK_AT_ZERO = 0;
+
+	const SPACESHIP_ZERO = 0;
+
+	const RESET_UNDER_ZERO = 0;
+
+	const CARRY_ZERO = 0;
+
+	const DIVIDE_BY_TWO = 2;
+
 	/**
 	 * The max number of digits the platform can natively add, subtract, multiply or divide without overflow.
 	 * For multiplication, this represents the max sum of the lengths of both operands.
@@ -59,7 +71,11 @@ class NativeCalculator extends Calculator
 	 */
 	public function add(string $a, string $b) : string
 	{
-		[$a, $b] = static::TypeHintNumeric($a, $b);
+		/** @var numeric */
+		$a = $a;
+
+		/** @var numeric */
+		$b = $b;
 
 		/**
 		 * @var int|float
@@ -70,7 +86,11 @@ class NativeCalculator extends Calculator
 			return (string) $result;
 		}
 
-		[$a, $b] = static::TypeHintString($a, $b);
+		/** @var string */
+		$a = $a;
+
+		/** @var string */
+		$b = $b;
 
 		if ('0' === $a) {
 			return $b;
@@ -123,7 +143,11 @@ class NativeCalculator extends Calculator
 			return $this->neg($a);
 		}
 
-		[$a, $b] = static::TypeHintNumeric($a, $b);
+		/** @var numeric */
+		$a = $a;
+
+		/** @var numeric */
+		$b = $b;
 
 		/**
 		 * @var int|float
@@ -134,7 +158,11 @@ class NativeCalculator extends Calculator
 			return (string) $result;
 		}
 
-		[$a, $b] = static::TypeHintString($a, $b);
+		/** @var string */
+		$a = $a;
+
+		/** @var string */
+		$b = $b;
 
 		[$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
@@ -161,7 +189,11 @@ class NativeCalculator extends Calculator
 			return $maybe;
 		}
 
-		[$a, $b] = static::TypeHintNumeric($a, $b);
+		/** @var numeric */
+		$a = $a;
+
+		/** @var numeric */
+		$b = $b;
 
 		$na = $a * 1; // cast to number
 
@@ -183,11 +215,18 @@ class NativeCalculator extends Calculator
 			}
 		}
 
-		[$a, $b] = static::TypeHintString($a, $b);
+		/** @var string */
+		$a = $a;
+
+		/** @var string */
+		$b = $b;
 
 		[$aDig, $bDig, $aNeg, $bNeg] = $this->init($a, $b);
 
-		[$q, $r] = static::TypeHintString(...$this->doDiv($aDig, $bDig));
+		/** @var array{0:string, 1:string} */
+		$done_div = $this->doDiv($aDig, $bDig);
+
+		[$q, $r] = $done_div;
 
 		if ($aNeg !== $bNeg) {
 			$q = $this->neg($q);
@@ -208,34 +247,9 @@ class NativeCalculator extends Calculator
 	 *
 	 * @return string the difference
 	 */
-	protected function sub(string $a, string $b) : string
+	private function sub(string $a, string $b) : string
 	{
 		return $this->add($a, $this->neg($b));
-	}
-
-	/**
-	 * @return array{0:numeric, 1:numeric}
-	 */
-	protected static function TypeHintNumeric(string $a, string $b) : array
-	{
-		/**
-		 * @var array{0:numeric, 1:numeric}
-		 */
-		return [$a, $b];
-	}
-
-	/**
-	 * @param numeric $a
-	 * @param numeric $b
-	 *
-	 * @return array{0:string, 1:string}
-	 */
-	protected static function TypeHintString($a, $b) : array
-	{
-		/**
-		 * @var array{0:string, 1:string}
-		 */
-		return [$a, $b];
 	}
 
 	/**
@@ -255,9 +269,9 @@ class NativeCalculator extends Calculator
 		for (;; $i -= $this->maxDigits) {
 			$blockLength = $this->maxDigits;
 
-			if ($i < 0) {
+			if ($i < self::RESET_UNDER_ZERO) {
 				$blockLength += $i;
-				$i = 0;
+				$i = self::RESET_UNDER_ZERO;
 			}
 
 			/**
@@ -331,9 +345,9 @@ class NativeCalculator extends Calculator
 		for (;; $i -= $this->maxDigits) {
 			$blockLength = $this->maxDigits;
 
-			if ($i < 0) {
+			if ($i < self::RESET_UNDER_ZERO) {
 				$blockLength += $i;
-				$i = 0;
+				$i = self::RESET_UNDER_ZERO;
 			}
 
 			/**
@@ -395,7 +409,7 @@ class NativeCalculator extends Calculator
 		$x = strlen($a);
 		$y = strlen($b);
 
-		$maxDigits = intdiv($this->maxDigits, 2);
+		$maxDigits = intdiv($this->maxDigits, self::DIVIDE_BY_TWO);
 		$complement = 10 ** $maxDigits;
 
 		$result = '0';
@@ -404,9 +418,9 @@ class NativeCalculator extends Calculator
 		for (;; $i -= $maxDigits) {
 			$blockALength = $maxDigits;
 
-			if ($i < 0) {
+			if ($i < self::RESET_UNDER_ZERO) {
 				$blockALength += $i;
-				$i = 0;
+				$i = self::RESET_UNDER_ZERO;
 			}
 
 			$blockA = (int) substr($a, $i, $blockALength);
@@ -418,9 +432,9 @@ class NativeCalculator extends Calculator
 			for (;; $j -= $maxDigits) {
 				$blockBLength = $maxDigits;
 
-				if ($j < 0) {
+				if ($j < self::RESET_UNDER_ZERO) {
 					$blockBLength += $j;
-					$j = 0;
+					$j = self::RESET_UNDER_ZERO;
 				}
 
 				$blockB = (int) substr($b, $j, $blockBLength);
@@ -434,12 +448,12 @@ class NativeCalculator extends Calculator
 
 				$line = $value . $line;
 
-				if (0 === $j) {
+				if (self::BREAK_AT_ZERO === $j) {
 					break;
 				}
 			}
 
-			if (0 !== $carry) {
+			if (self::CARRY_ZERO !== $carry) {
 				$line = (string) $carry . (string) $line;
 			}
 
@@ -450,7 +464,7 @@ class NativeCalculator extends Calculator
 				$result = $this->add($result, $line);
 			}
 
-			if (0 === $i) {
+			if (self::BREAK_AT_ZERO === $i) {
 				break;
 			}
 		}
@@ -487,7 +501,7 @@ class NativeCalculator extends Calculator
 		$z = $y; // focus length, always $y or $y+1
 
 		for (;;) {
-			$focus = substr((string) $a, 0, $z);
+			$focus = substr($a, self::SUBSTR_FROM_START, $z);
 
 			$cmp = $this->doCmp($focus, $b);
 
@@ -513,7 +527,7 @@ class NativeCalculator extends Calculator
 				break;
 			}
 
-			$x = strlen((string) $a);
+			$x = strlen($a);
 
 			if ($x < $y) { // remainder < dividend
 				break;
@@ -544,7 +558,7 @@ class NativeCalculator extends Calculator
 			return $cmp;
 		}
 
-		return strcmp($a, $b) <=> 0; // enforce [-1, 0, 1]
+		return strcmp($a, $b) <=> self::SPACESHIP_ZERO; // enforce [-1, 0, 1]
 	}
 
 	/**

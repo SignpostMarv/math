@@ -42,6 +42,16 @@ abstract class Calculator
 
 	const ORD126 = 126;
 
+	const ALPHABET_ZERO = 0;
+
+	const ALPHABET_ONE = 1;
+
+	const INCREMENT_ZERO = 0;
+
+	const INDEX_ZERO = 0;
+
+	const INDEX_ONE = 1;
+
 	/**
 	 * Negates a number.
 	 *
@@ -163,14 +173,14 @@ abstract class Calculator
 		$this->ValidateAlphabet($number, $alphabet);
 
 		// remove leading "zeros"
-		$number = ltrim($number, $alphabet[0]);
+		$number = ltrim($number, $alphabet[self::ALPHABET_ZERO]);
 
 		if ('' === $number) {
 			return '0';
 		}
 
 		// optimize for "one"
-		if ($number === $alphabet[1]) {
+		if ($number === $alphabet[self::ALPHABET_ONE]) {
 			return '1';
 		}
 
@@ -182,14 +192,14 @@ abstract class Calculator
 		for ($i = \strlen($number) - 1; $i >= 0; --$i) {
 			$index = strpos($alphabet, $number[$i]);
 
-			if (0 !== $index) {
-				$result = $this->add($result, (1 === $index)
+			if (self::INDEX_ZERO !== $index) {
+				$result = $this->add($result, (self::INDEX_ONE === $index)
 					? $power
 					: $this->mul($power, (string) $index)
 				);
 			}
 
-			if (0 !== $i) {
+			if (self::INCREMENT_ZERO !== $i) {
 				$power = $this->mul($power, $base);
 			}
 		}
@@ -218,10 +228,10 @@ abstract class Calculator
 			);
 		}
 
-		$this->ValidateAlphabet($alphabet[0] ?? '0', $alphabet);
+		$this->ValidateAlphabet($alphabet[self::ALPHABET_ZERO] ?? '0', $alphabet);
 
 		if ('0' === $number) {
-			return $alphabet[0];
+			return $alphabet[self::ALPHABET_ZERO];
 		}
 
 		$base = (string) $base;
@@ -266,7 +276,7 @@ abstract class Calculator
 	 * @throws InvalidArgumentException if $alphabet does not contain sufficient characters
 	 * @throws InvalidArgumentException if $number cannot exist in $alphabet
 	 */
-	protected function ValidateAlphabet(string $number, string $alphabet) : void
+	private function ValidateAlphabet(string $number, string $alphabet) : void
 	{
 		if ('' === $number) {
 			throw new InvalidArgumentException(

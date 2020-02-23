@@ -13,6 +13,10 @@ matrix:
     - php: 7.4
       env:
         - psalm=yes
+    - php: 7.4
+      env:
+        - xdebug=yes
+        - infection=yes
   fast_finish: true
 
 cache:
@@ -32,7 +36,9 @@ install:
 script:
   - if [[ "$psalm" != "yes" && "$xdebug" != "yes" ]]; then composer run static-analysis; fi
   - if [[ "$psalm" = "yes" ]]; then vendor/bin/psalm --show-info=false --diff --diff-methods; fi
-  - if [[ "$xdebug" = "yes" ]]; then vendor/bin/phpunit --prepend=./phpunit.xdebug-filter.php --coverage-clover ./phpunit.clover; fi
+  - if [[ "$xdebug" = "yes" && "$infection" != "yes" ]]; then vendor/bin/phpunit --prepend=./phpunit.xdebug-filter.php --coverage-clover ./phpunit.clover && vendor/bin/php-coveralls -v; fi
+  - if [[ "$infection" = "yes" ]]; then ./vendor/bin/phpunit  --prepend=./phpunit.xdebug-filter.php --coverage-xml=./coverage/coverage-xml/ --log-junit=./coverage/junit.xml; fi
+  - if [[ "$infection" = "yes" ]]; then phpenv config-rm xdebug.ini && ./vendor/bin/infection --coverage=./coverage/ -j$(nproc); fi
 
 after_script:
-  - if [[ "$xdebug" = "yes" ]]; vendor/bin/php-coveralls -v; fi
+  - if [[ "$infection" = "yes" ]]; then cat infection.log; fi
