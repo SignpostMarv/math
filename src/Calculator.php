@@ -272,6 +272,32 @@ abstract class Calculator
 	}
 
 	/**
+	 * Runs some checks for early exits of Calculator::divQR().
+	 *
+	 * @return array{0:string, 1:string}|null returns null if not exiting early
+	 */
+	protected function MaybeEarlyExitDivQR(string $a, string $b) : ? array
+	{
+		if ('0' === $a) {
+			return ['0', '0'];
+		}
+
+		if ($a === $b) {
+			return ['1', '0'];
+		}
+
+		if ('1' === $b) {
+			return [$a, '0'];
+		}
+
+		if ('-1' === $b) {
+			return [$this->neg($a), '0'];
+		}
+
+		return null;
+	}
+
+	/**
 	 * @throws InvalidArgumentException if $number is an empty string
 	 * @throws InvalidArgumentException if $alphabet does not contain sufficient characters
 	 * @throws InvalidArgumentException if $number cannot exist in $alphabet
@@ -312,31 +338,5 @@ abstract class Calculator
 				$char
 			));
 		}
-	}
-
-	/**
-	 * Runs some checks for early exits of Calculator::divQR().
-	 *
-	 * @return array{0:string, 1:string}|null returns null if not exiting early
-	 */
-	protected function MaybeEarlyExitDivQR(string $a, string $b) : ? array
-	{
-		if ('0' === $a) {
-			return ['0', '0'];
-		}
-
-		if ($a === $b) {
-			return ['1', '0'];
-		}
-
-		if ('1' === $b) {
-			return [$a, '0'];
-		}
-
-		if ('-1' === $b) {
-			return [$this->neg($a), '0'];
-		}
-
-		return null;
 	}
 }
