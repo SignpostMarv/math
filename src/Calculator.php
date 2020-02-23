@@ -262,10 +262,10 @@ abstract class Calculator
 	}
 
 	/**
-	* @throws InvalidArgumentException if $number is an empty string
-	* @throws InvalidArgumentException if $alphabet does not contain sufficient characters
-	* @throws InvalidArgumentException if $number cannot exist in $alphabet
-	*/
+	 * @throws InvalidArgumentException if $number is an empty string
+	 * @throws InvalidArgumentException if $alphabet does not contain sufficient characters
+	 * @throws InvalidArgumentException if $number cannot exist in $alphabet
+	 */
 	protected function ValidateAlphabet(string $number, string $alphabet) : void
 	{
 		if ('' === $number) {
@@ -305,10 +305,10 @@ abstract class Calculator
 	}
 
 	/**
-	* Runs some checks for early exits of Calculator::divQR().
-	*
-	* @return array{0:string, 1:string}|null returns null if not exiting early
-	*/
+	 * Runs some checks for early exits of Calculator::divQR().
+	 *
+	 * @return array{0:string, 1:string}|null returns null if not exiting early
+	 */
 	protected function MaybeEarlyExitDivQR(string $a, string $b) : ? array
 	{
 		if ('0' === $a) {

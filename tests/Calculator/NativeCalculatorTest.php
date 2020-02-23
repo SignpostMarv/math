@@ -14,8 +14,8 @@ use SignpostMarv\Brick\Math\Calculator\NativeCalculator;
 class NativeCalculatorTest extends AbstractCalculatorTest
 {
 	/**
-	* @throws RuntimeException if NativeCalculator::__construct() does not support the current platform
-	*/
+	 * @throws RuntimeException if NativeCalculator::__construct() does not support the current platform
+	 */
 	protected function ObtainCalculator() : Calculator
 	{
 		return new NativeCalculator();

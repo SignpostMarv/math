@@ -415,8 +415,8 @@ abstract class AbstractCalculatorTest extends TestCase
 	}
 
 	/**
-	* @throws InvalidArgumentException if it behaves as expected
-	*/
+	 * @throws InvalidArgumentException if it behaves as expected
+	 */
 	public function testToArbitraryBaseOnNegativeNumber() : void
 	{
 		$this->expectException(InvalidArgumentException::class);
@@ -426,9 +426,9 @@ abstract class AbstractCalculatorTest extends TestCase
 	}
 
 	/**
-	* @throws ExpectationFailedException if assertions fail
-	* @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
-	*/
+	 * @throws ExpectationFailedException if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
+	 */
 	public function testNeg() : void
 	{
 		static::assertSame('-1', $this->ObtainCalculator()->neg('1'));
@@ -437,9 +437,9 @@ abstract class AbstractCalculatorTest extends TestCase
 	}
 
 	/**
-	* @throws ExpectationFailedException if assertions fail
-	* @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
-	*/
+	 * @throws ExpectationFailedException if assertions fail
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
+	 */
 	public function testDivQR() : void
 	{
 		static::assertSame(['0', '0'], $this->ObtainCalculator()->divQR('0', '-1'));

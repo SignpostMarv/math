@@ -62,8 +62,8 @@ class NativeCalculator extends Calculator
 		[$a, $b] = static::TypeHintNumeric($a, $b);
 
 		/**
-		* @var int|float
-		*/
+		 * @var int|float
+		 */
 		$result = $a + $b;
 
 		if (is_int($result)) {
@@ -93,8 +93,8 @@ class NativeCalculator extends Calculator
 		}
 
 		/**
-		* @var string
-		*/
+		 * @var string
+		 */
 		return $result;
 	}
 
@@ -126,8 +126,8 @@ class NativeCalculator extends Calculator
 		[$a, $b] = static::TypeHintNumeric($a, $b);
 
 		/**
-		* @var int|float
-		*/
+		 * @var int|float
+		 */
 		$result = $a * $b;
 
 		if (is_int($result)) {
@@ -145,8 +145,8 @@ class NativeCalculator extends Calculator
 		}
 
 		/**
-		* @var string
-		*/
+		 * @var string
+		 */
 		return $result;
 	}
 
@@ -214,27 +214,27 @@ class NativeCalculator extends Calculator
 	}
 
 	/**
-	* @return array{0:numeric, 1:numeric}
-	*/
+	 * @return array{0:numeric, 1:numeric}
+	 */
 	protected static function TypeHintNumeric(string $a, string $b) : array
 	{
 		/**
-		* @var array{0:numeric, 1:numeric}
-		*/
+		 * @var array{0:numeric, 1:numeric}
+		 */
 		return [$a, $b];
 	}
 
 	/**
-	* @param numeric $a
-	* @param numeric $b
-	*
-	* @return array{0:string, 1:string}
-	*/
+	 * @param numeric $a
+	 * @param numeric $b
+	 *
+	 * @return array{0:string, 1:string}
+	 */
 	protected static function TypeHintString($a, $b) : array
 	{
 		/**
-		* @var array{0:string, 1:string}
-		*/
+		 * @var array{0:string, 1:string}
+		 */
 		return [$a, $b];
 	}
 
@@ -261,13 +261,13 @@ class NativeCalculator extends Calculator
 			}
 
 			/**
-			* @var numeric
-			*/
+			 * @var numeric
+			 */
 			$blockA = substr($a, $i, $blockLength);
 
 			/**
-			* @var numeric
-			*/
+			 * @var numeric
+			 */
 			$blockB = substr($b, $i, $blockLength);
 
 			$sum = (string) ($blockA + $blockB + $carry);
@@ -337,13 +337,13 @@ class NativeCalculator extends Calculator
 			}
 
 			/**
-			* @var numeric
-			*/
+			 * @var numeric
+			 */
 			$blockA = substr($a, $i, $blockLength);
 
 			/**
-			* @var numeric
-			*/
+			 * @var numeric
+			 */
 			$blockB = substr($b, $i, $blockLength);
 
 			$sum = $blockA - $blockB - $carry;
@@ -379,8 +379,8 @@ class NativeCalculator extends Calculator
 		}
 
 		/**
-		* @var string
-		*/
+		 * @var string
+		 */
 		return $result;
 	}
 
@@ -456,8 +456,8 @@ class NativeCalculator extends Calculator
 		}
 
 		/**
-		* @var string
-		*/
+		 * @var string
+		 */
 		return $result;
 	}
 
@@ -505,8 +505,8 @@ class NativeCalculator extends Calculator
 			$a = $this->sub($a, $b . $zeros);
 
 			/**
-			* @var numeric|'0'
-			*/
+			 * @var numeric|'0'
+			 */
 			$r = $a;
 
 			if ('0' === $r) { // remainder == 0
