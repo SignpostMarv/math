@@ -8,12 +8,13 @@ cache:
     - ./.php_cs.cache
   directories:
     - $HOME/.composer/cache
+    - ./psalm/cache
 
 before_script:
   - composer install
 
 script:
-  - vendor/bin/psalm --show-info=false
+  - vendor/bin/psalm --show-info=false --diff --diff-methods
   - vendor/bin/phpunit --coverage-clover ./phpunit.clover
 
 after_script:
