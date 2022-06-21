@@ -1,2 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="3.9.3@2e4154d76e24d1b4e59e6cc2bebef7790cb9e550"/>
+<files psalm-version="4.23.0@f1fe6ff483bf325c803df9f510d09a03fd796f88">
+  <file src="src/Calculator/NativeCalculator.php">
+    <InvalidOperand occurrences="7">
+      <code>$a * $b</code>
+      <code>$a * 1</code>
+      <code>$a + $b</code>
+      <code>$b * 1</code>
+      <code>$blockA + $blockB</code>
+      <code>$blockA - $blockB</code>
+      <code>$sum += $complement</code>
+    </InvalidOperand>
+    <InvalidReturnStatement occurrences="1">
+      <code>['0', $a]</code>
+    </InvalidReturnStatement>
+    <LessSpecificReturnStatement occurrences="1">
+      <code>[$q, $r]</code>
+    </LessSpecificReturnStatement>
+    <MoreSpecificReturnType occurrences="1">
+      <code>array{0:numeric, 1:numeric}</code>
+    </MoreSpecificReturnType>
+    <RedundantCast occurrences="1">
+      <code>(string) $line</code>
+    </RedundantCast>
+    <UnnecessaryVarAnnotation occurrences="2">
+      <code>int|float</code>
+      <code>int|float</code>
+    </UnnecessaryVarAnnotation>
+  </file>
+</files>
