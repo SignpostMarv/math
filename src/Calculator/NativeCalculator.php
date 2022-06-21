@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace SignpostMarv\Brick\Math\Calculator;
 
+use function assert;
 use function intdiv;
+use function is_int;
+use function is_null;
 use function ltrim;
+use const PHP_INT_SIZE;
 use RuntimeException;
 use SignpostMarv\Brick\Math\Calculator;
 use function str_pad;
+use const STR_PAD_LEFT;
 use function str_repeat;
 use function strcmp;
 use function strlen;
@@ -19,24 +24,24 @@ use function substr;
  */
 class NativeCalculator extends Calculator
 {
-	const MAX_DIGITS = [
+	public const MAX_DIGITS = [
 		4 => 9,
 		8 => 18,
 	];
 
-	const COMPARE_LESS_THAN = -1;
+	public const COMPARE_LESS_THAN = -1;
 
-	const SUBSTR_FROM_START = 0;
+	public const SUBSTR_FROM_START = 0;
 
-	const BREAK_AT_ZERO = 0;
+	public const BREAK_AT_ZERO = 0;
 
-	const SPACESHIP_ZERO = 0;
+	public const SPACESHIP_ZERO = 0;
 
-	const RESET_UNDER_ZERO = 0;
+	public const RESET_UNDER_ZERO = 0;
 
-	const CARRY_ZERO = 0;
+	public const CARRY_ZERO = 0;
 
-	const DIVIDE_BY_TWO = 2;
+	public const DIVIDE_BY_TWO = 2;
 
 	/**
 	 * The max number of digits the platform can natively add, subtract, multiply or divide without overflow.
@@ -500,7 +505,7 @@ class NativeCalculator extends Calculator
 		$r = $a; // remainder
 		$z = $y; // focus length, always $y or $y+1
 
-		for (;;) {
+		  while (true){
 			$focus = substr($a, self::SUBSTR_FROM_START, $z);
 
 			$cmp = $this->doCmp($focus, $b);

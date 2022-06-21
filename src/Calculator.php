@@ -10,6 +10,7 @@ use function ltrim;
 use function ord;
 use function preg_match;
 use function preg_quote;
+use function strlen;
 use function strpos;
 use function strrev;
 use function strtolower;
@@ -32,25 +33,25 @@ abstract class Calculator
 	 */
 	public const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 
-	const BASE2 = 2;
+	public const BASE2 = 2;
 
-	const BASE36 = 36;
+	public const BASE36 = 36;
 
-	const ORD10 = 10;
+	public const ORD10 = 10;
 
-	const ORD32 = 32;
+	public const ORD32 = 32;
 
-	const ORD126 = 126;
+	public const ORD126 = 126;
 
-	const ALPHABET_ZERO = 0;
+	public const ALPHABET_ZERO = 0;
 
-	const ALPHABET_ONE = 1;
+	public const ALPHABET_ONE = 1;
 
-	const INCREMENT_ZERO = 0;
+	public const INCREMENT_ZERO = 0;
 
-	const INDEX_ZERO = 0;
+	public const INDEX_ZERO = 0;
 
-	const INDEX_ONE = 1;
+	public const INDEX_ONE = 1;
 
 	/**
 	 * Negates a number.
@@ -189,7 +190,7 @@ abstract class Calculator
 
 		$base = (string) $base;
 
-		for ($i = \strlen($number) - 1; $i >= 0; --$i) {
+		for ($i = strlen($number) - 1; $i >= 0; --$i) {
 			$index = strpos($alphabet, $number[$i]);
 
 			if (self::INDEX_ZERO !== $index) {
@@ -298,9 +299,9 @@ abstract class Calculator
 	}
 
 	/**
-	 * @throws InvalidArgumentException if $number is an empty string
 	 * @throws InvalidArgumentException if $alphabet does not contain sufficient characters
 	 * @throws InvalidArgumentException if $number cannot exist in $alphabet
+	 * @throws InvalidArgumentException if $number is an empty string
 	 */
 	private function ValidateAlphabet(string $number, string $alphabet) : void
 	{

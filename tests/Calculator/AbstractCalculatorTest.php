@@ -86,8 +86,8 @@ abstract class AbstractCalculatorTest extends TestCase
 	 * @param int $base the base to convert the number to
 	 * @param string $expected the expected result
 	 *
-	 * @throws InvalidArgumentException if $number is not supported by static::ObtainCalculator()->toBase()
 	 * @throws ExpectationFailedException if assertions fail
+	 * @throws InvalidArgumentException if $number is not supported by static::ObtainCalculator()->toBase()
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testToBase($number, int $base, string $expected) : void
@@ -220,8 +220,8 @@ abstract class AbstractCalculatorTest extends TestCase
 	 *
 	 * @param string $base10
 	 *
-	 * @throws InvalidArgumentException if $baseN is not supported by static::ObtainCalculator()->fromBase()
 	 * @throws ExpectationFailedException if assertions fail
+	 * @throws InvalidArgumentException if $baseN is not supported by static::ObtainCalculator()->fromBase()
 	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testFromArbitraryBase($base10, string $alphabet, string $baseN) : void
@@ -255,8 +255,8 @@ abstract class AbstractCalculatorTest extends TestCase
 	 * @param string $base10
 	 *
 	 * @throws ExpectationFailedException if assertions fail
-	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 * @throws InvalidArgumentException if it behaves as expected
+	 * @throws RecursionContext\InvalidArgumentException if something goes horribly wrong
 	 */
 	public function testToArbitraryBase($base10, string $alphabet, string $baseN) : void
 	{
@@ -397,7 +397,7 @@ abstract class AbstractCalculatorTest extends TestCase
 	 */
 	public function testToArbitraryBaseWithInvalidAlphabet(string $alphabet) : void
 	{
-		$this->expectException(\InvalidArgumentException::class);
+		$this->expectException(InvalidArgumentException::class);
 		$this->expectExceptionMessage('The alphabet must contain at least 2 chars.');
 
 		$this->ObtainCalculator()->toArbitraryBase('123', $alphabet, 2);
